@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>城乡文化直连平台 - 非遗好物</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f7f7f7;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* iPhone 15 Pro Max 外壳 */
+        .device-container {
+            position: relative;
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 55px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        /* 顶部刘海 */
+        .notch {
+            position: absolute;
+            width: 180px;
+            height: 32px;
+            background: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 999;
+        }
+        
+        /* 底部指示条 */
+        .home-indicator {
+            position: absolute;
+            width: 135px;
+            height: 5px;
+            background: #fff;
+            border-radius: 3px;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        /* 屏幕 */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #F9F7F4;
+            border-radius: 45px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            color: #000;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .battery-icon {
+            width: 25px;
+            height: 12px;
+            border: 1px solid #000;
+            border-radius: 3px;
+            padding: 1px;
+            margin-left: 5px;
+            position: relative;
+        }
+        
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 6px;
+            background: #000;
+            right: -4px;
+            top: 3px;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .battery-level {
+            height: 100%;
+            width: 60%;
+            background: #000;
+            border-radius: 1px;
+        }
+        
+        /* 搜索栏 */
+        .search-bar-container {
+            padding: 10px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(249, 247, 244, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+        
+        .search-bar {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .search-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            color: #999;
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: #666;
+            background: transparent;
+        }
+        
+        /* 顶部导航 */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            position: relative;
+        }
+        
+        .back-button {
+            font-size: 18px;
+            color: #333;
+            padding: 5px;
+            margin-left: -5px;
+        }
+        
+        .page-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #333;
+            letter-spacing: 0.5px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .right-action {
+            font-size: 18px;
+            color: #8D6E63;
+            padding: 5px;
+        }
+        
+        /* 分类导航 */
+        .category-nav {
+            padding: 5px 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            background: rgba(249, 247, 244, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            margin-bottom: 5px;
+        }
+        
+        .category-item {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-right: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            font-size: 13px;
+            color: #666;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .category-item.active {
+            background: #8D6E63;
+            color: #fff;
+            border: none;
+        }
+        
+        /* 排序和筛选栏 */
+        .filter-bar {
+            display: flex;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .filter-option.active {
+            color: #8D6E63;
+            font-weight: 500;
+        }
+        
+        .filter-option-icon {
+            font-size: 12px;
+            margin-left: 3px;
+        }
+        
+        /* 内容区域 */
+        .content {
+            height: calc(100% - 44px - 50px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background-image: url('https://images.unsplash.com/photo-1595411425732-e49e26c310da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80&brightness=-95&saturation=-30&alpha=0.08');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        /* 模拟图标 */
+        .icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: inherit;
+        }
+        
+        /* 底部导航栏 */
+        .tab-bar {
+            height: 50px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 10px;
+            z-index: 10;
+            width: 100%;
+            border-bottom-left-radius: 45px;
+            border-bottom-right-radius: 45px;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 25%;
+            position: relative;
+            z-index: 1;
+            padding: 5px 0;
+            max-width: 70px;
+            margin: 0 auto;
+        }
+        
+        .tab-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+            color: #999;
+        }
+        
+        .tab-item.active .tab-icon {
+            color: #8D6E63;
+        }
+        
+        .tab-text {
+            font-size: 10px;
+            color: #999;
+        }
+        
+        .tab-item.active .tab-text {
+            color: #8D6E63;
+        }
+        
+        /* 商品列表 */
+        .product-list {
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .product-item {
+            width: calc(50% - 10px);
+            margin: 5px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 0;
+            padding-bottom: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-item:active .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 10px;
+        }
+        
+        .product-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 42px;
+        }
+        
+        .product-desc {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .product-price {
+            font-size: 16px;
+            font-weight: 600;
+            color: #8D6E63;
+        }
+        
+        .product-price .small {
+            font-size: 12px;
+            font-weight: normal;
+        }
+        
+        .cart-btn {
+            width: 28px;
+            height: 28px;
+            background: rgba(141, 110, 99, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #8D6E63;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+        
+        .cart-btn:active {
+            background: #8D6E63;
+            color: white;
+            transform: scale(0.9);
+        }
+        
+        .product-tag {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            background: #8D6E63;
+            color: white;
+            font-size: 11px;
+            padding: 3px 8px 3px 10px;
+            border-radius: 0 10px 10px 0;
+            z-index: 5;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        
+        .rating-stars {
+            color: #FFAB40;
+            margin-right: 3px;
+        }
+        
+        /* 空状态 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            text-align: center;
+            color: #999;
+            display: none;
+        }
+        
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+        
+        .empty-text {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .refresh-btn {
+            background: #8D6E63;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <div class="notch"></div>
+        <div class="home-indicator"></div>
+        
+        <div class="screen">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-left">12:30</div>
+                <div class="status-right">
+                    <span style="margin-right: 5px;">5G</span>
+                    <div class="battery-icon">
+                        <div class="battery-level"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 顶部导航栏 -->
+                <div class="nav-header">
+                    <div class="back-button" id="backButton">←</div>
+                    <div class="page-title">非遗好物</div>
+                    <div class="right-action" id="cartButton">🛒</div>
+                </div>
+                
+                <!-- 搜索栏 -->
+                <div class="search-bar-container">
+                    <div class="search-bar">
+                        <div class="icon search-icon">🔍</div>
+                        <input type="text" class="search-input" placeholder="搜索非遗产品、特产、工艺...">
+                    </div>
+                </div>
+                
+                <!-- 分类导航 -->
+                <div class="category-nav">
+                    <div class="category-item active">全部</div>
+                    <div class="category-item">陶瓷</div>
+                    <div class="category-item">茶叶</div>
+                    <div class="category-item">丝绸</div>
+                    <div class="category-item">刺绣</div>
+                    <div class="category-item">木雕</div>
+                    <div class="category-item">漆器</div>
+                    <div class="category-item">美食</div>
+                    <div class="category-item">竹编</div>
+                </div>
+                
+                <!-- 排序和筛选栏 -->
+                <div class="filter-bar">
+                    <div class="filter-option active" data-sort="default">综合</div>
+                    <div class="filter-option" data-sort="sales">销量 <span class="filter-option-icon">↓</span></div>
+                    <div class="filter-option" data-sort="price">价格 <span class="filter-option-icon">↕️</span></div>
+                    <div class="filter-option" data-sort="new">新品</div>
+                </div>
+                
+                <!-- 商品列表 -->
+                <div class="product-list" id="productList">
+                    <!-- 商品项1 -->
+                    <div class="product-item">
+                        <div class="product-tag">热门</div>
+                        <div class="product-image">
+                            <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcbu01.alicdn.com%2Fimg%2Fibank%2FO1CN01uDmllM1bVJ373kZ6p_%21%212212075323470-0-cib.jpg&refer=http%3A%2F%2Fcbu01.alicdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1744905683&t=978f85f00cddffd8ef1aa61e28531e05" alt="景德镇手绘青花瓷">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">景德镇手绘青花瓷茶杯套装 传统工艺</div>
+                            <div class="product-desc">千年瓷都 匠心传承</div>
+                            <div class="product-rating">
+                                <span class="rating-stars">★★★★★</span>
+                                <span>4.9 (238)</span>
+                            </div>
+                            <div class="product-meta">
+                                <div class="product-price"><span class="small">¥</span>298</div>
+                                <div class="cart-btn">+</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 商品项2 -->
+                    <div class="product-item">
+                        <div class="product-image">
+                            <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcbu01.alicdn.com%2Fimg%2Fibank%2F2020%2F007%2F033%2F22906330700_2097396985.jpg&refer=http%3A%2F%2Fcbu01.alicdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1744905775&t=2daf5f895a8632fb9780cbe1479d67ad" alt="云南普洱茶">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">云南普洱茶饼 古法制作 陈年普洱</div>
+                            <div class="product-desc">百年老树 纯手工工艺</div>
+                            <div class="product-rating">
+                                <span class="rating-stars">★★★★★</span>
+                                <span>4.8 (156)</span>
+                            </div>
+                            <div class="product-meta">
+                                <div class="product-price"><span class="small">¥</span>368</div>
+                                <div class="cart-btn">+</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 商品项3 -->
+                    <div class="product-item">
+                        <div class="product-tag">新品</div>
+                        <div class="product-image">
+                            <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.alicdn.com%2Fbao%2Fuploaded%2Fi1%2F16698939%2FO1CN01JJnTxn2Fu73HbTNqn_%21%2116698939.png&refer=http%3A%2F%2Fimg.alicdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1744906117&t=5f938c69a9c53d8d1b95860b1fd2ff56" alt="苗族刺绣背包">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">贵州黔东南苗族刺绣手提包 民族风</div>
+                            <div class="product-desc">非遗传承 纯手工制作</div>
+                            <div class="product-rating">
+                                <span class="rating-stars">★★★★☆</span>
+                                <span>4.6 (89)</span>
+                            </div>
+                            <div class="product-meta">
+                                <div class="product-price"><span class="small">¥</span>259</div>
+                                <div class="cart-btn">+</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 商品项4 -->
+                    <div class="product-item">
+                        <div class="product-image">
+                            <img src="https://bkimg.cdn.bcebos.com/pic/e850352ac65c10388c5b7aefb3119313b07e89f2" alt="杭州油纸伞">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">杭州西湖手工油纸伞 传统工艺装饰伞</div>
+                            <div class="product-desc">古法工艺 精美彩绘</div>
+                            <div class="product-rating">
+                                <span class="rating-stars">★★★★☆</span>
+                                <span>4.7 (112)</span>
+                            </div>
+                            <div class="product-meta">
+                                <div class="product-price"><span class="small">¥</span>188</div>
+                                <div class="cart-btn">+</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 商品项5 -->
+                    <div class="product-item">
+                        <div class="product-image">
+                            <img src="https://t14.baidu.com/it/u=3379475939,2106314240&fm=224&app=112&f=JPEG?w=500&h=500" alt="竹编工艺品">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">四川竹编茶篮 竹艺收纳篮 手工编织</div>
+                            <div class="product-desc">传统竹编 匠人手作</div>
+                            <div class="product-rating">
+                                <span class="rating-stars">★★★★☆</span>
+                                <span>4.5 (67)</span>
+                            </div>
+                            <div class="product-meta">
+                                <div class="product-price"><span class="small">¥</span>158</div>
+                                <div class="cart-btn">+</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 商品项6 -->
+                    <div class="product-item">
+                        <div class="product-tag">限量</div>
+                        <div class="product-image">
+                            <img src="https://img1.baidu.com/it/u=4144751615,2310479580&fm=253&fmt=auto&app=138&f=JPEG?w=418&h=418" alt="绍兴黄酒">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">绍兴10年陈酿花雕酒 传统手工黄酒</div>
+                            <div class="product-desc">古法酿造 陈年窖藏</div>
+                            <div class="product-rating">
+                                <span class="rating-stars">★★★★★</span>
+                                <span>4.9 (203)</span>
+                            </div>
+                            <div class="product-meta">
+                                <div class="product-price"><span class="small">¥</span>328</div>
+                                <div class="cart-btn">+</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 空状态 -->
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">🔍</div>
+                    <div class="empty-text">暂无符合条件的商品<br>请尝试其他筛选条件</div>
+                    <div class="refresh-btn" id="refreshButton">重置筛选</div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="tab-bar">
+                <div class="tab-item">
+                    <div class="icon tab-icon">🏡</div>
+                    <div class="tab-text">首页</div>
+                </div>
+                <div class="tab-item">
+                    <div class="icon tab-icon">🧶</div>
+                    <div class="tab-text">体验</div>
+                </div>
+                <div class="tab-item">
+                    <div class="icon tab-icon">🗺️</div>
+                    <div class="tab-text">路线</div>
+                </div>
+                <div class="tab-item">
+                    <div class="icon tab-icon">👤</div>
+                    <div class="tab-text">我的</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 底部导航点击事件
+        const tabItems = document.querySelectorAll('.tab-item');
+        tabItems.forEach(item => {
+            item.addEventListener('click', function() {
+                tabItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 页面跳转逻辑
+                const tabText = this.querySelector('.tab-text').textContent;
+                switch(tabText) {
+                    case '首页':
+                        window.location.href = 'index.html';
+                        break;
+                    case '体验':
+                        window.location.href = 'cultural-experience.html';
+                        break;
+                    case '路线':
+                        window.location.href = 'custom-route.html';
+                        break;
+                    case '我的':
+                        window.location.href = 'user-center.html';
+                        break;
+                }
+            });
+        });
+        
+        // 返回按钮点击事件
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.history.back();
+        });
+        
+        // 购物车按钮点击事件
+        document.getElementById('cartButton').addEventListener('click', function() {
+            alert('购物车功能即将上线');
+        });
+        
+        // 分类导航点击事件
+        const categoryItems = document.querySelectorAll('.category-item');
+        categoryItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // 移除所有active类
+                categoryItems.forEach(i => i.classList.remove('active'));
+                // 添加active类到当前点击项
+                this.classList.add('active');
+                
+                // 获取当前选中分类
+                const category = this.textContent;
+                console.log('选择分类:', category);
+                
+                // 根据分类筛选商品
+                filterProducts(category);
+            });
+        });
+        
+        // 排序选项点击事件
+        const filterOptions = document.querySelectorAll('.filter-option');
+        filterOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // 移除所有active类
+                filterOptions.forEach(o => o.classList.remove('active'));
+                // 添加active类到当前点击项
+                this.classList.add('active');
+                
+                // 获取排序方式
+                const sortType = this.dataset.sort;
+                console.log('选择排序:', sortType);
+                
+                // 根据排序方式排序商品
+                sortProducts(sortType);
+                
+                // 切换价格排序方向
+                if (sortType === 'price') {
+                    const icon = this.querySelector('.filter-option-icon');
+                    if (icon.textContent === '↑') {
+                        icon.textContent = '↓';
+                    } else {
+                        icon.textContent = '↑';
+                    }
+                }
+            });
+        });
+        
+        // 添加到购物车按钮点击事件
+        const cartButtons = document.querySelectorAll('.cart-btn');
+        cartButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation(); // 阻止冒泡，避免触发商品项点击事件
+                
+                // 添加点击动画效果
+                this.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+                
+                // 获取商品信息
+                const productItem = this.closest('.product-item');
+                const productName = productItem.querySelector('.product-name').textContent;
+                const productPrice = productItem.querySelector('.product-price').textContent;
+                
+                console.log(`添加到购物车: ${productName} - ${productPrice}`);
+                alert(`已添加到购物车: ${productName}`);
+            });
+        });
+        
+        // 商品项点击事件
+        const productItems = document.querySelectorAll('.product-item');
+        productItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const productName = this.querySelector('.product-name').textContent;
+                console.log('查看商品详情:', productName);
+                
+                // 这里可以跳转到商品详情页
+                window.location.href = 'product-detail.html';
+            });
+        });
+        
+        // 搜索框事件
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('focus', function() {
+            this.parentElement.style.boxShadow = '0 0 0 2px rgba(141, 110, 99, 0.3)';
+        });
+        
+        searchInput.addEventListener('blur', function() {
+            this.parentElement.style.boxShadow = '0 1px 5px rgba(0,0,0,0.05)';
+        });
+        
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const keyword = this.value.trim();
+                if (keyword) {
+                    console.log('搜索关键词:', keyword);
+                    searchProducts(keyword);
+                }
+            }
+        });
+        
+        // 重置筛选按钮点击事件
+        document.getElementById('refreshButton').addEventListener('click', function() {
+            // 重置分类选择
+            categoryItems.forEach((item, index) => {
+                if (index === 0) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            // 重置排序选择
+            filterOptions.forEach((option, index) => {
+                if (index === 0) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+            
+            // 清空搜索框
+            searchInput.value = '';
+            
+            // 显示所有商品
+            showAllProducts();
+        });
+        
+        // 根据分类筛选商品
+        function filterProducts(category) {
+            const productList = document.getElementById('productList');
+            const emptyState = document.getElementById('emptyState');
+            
+            // 如果选择"全部"则显示所有商品
+            if (category === '全部') {
+                showAllProducts();
+                return;
+            }
+            
+            // 模拟筛选逻辑
+            const items = productList.querySelectorAll('.product-item');
+            let hasMatchedProducts = false;
+            
+            items.forEach(item => {
+                const productName = item.querySelector('.product-name').textContent;
+                const productDesc = item.querySelector('.product-desc').textContent;
+                
+                // 模拟匹配逻辑，实际应用中应该根据产品数据进行匹配
+                const isMatch = productName.includes(category) || 
+                               productDesc.includes(category) ||
+                               (category === '陶瓷' && productName.includes('青花瓷')) ||
+                               (category === '茶叶' && productName.includes('普洱')) ||
+                               (category === '刺绣' && productName.includes('刺绣')) ||
+                               (category === '竹编' && productName.includes('竹编'));
+                
+                if (isMatch) {
+                    item.style.display = 'block';
+                    hasMatchedProducts = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // 显示或隐藏空状态
+            if (hasMatchedProducts) {
+                productList.style.display = 'flex';
+                emptyState.style.display = 'none';
+            } else {
+                productList.style.display = 'none';
+                emptyState.style.display = 'flex';
+            }
+        }
+        
+        // 根据排序方式排序商品
+        function sortProducts(sortType) {
+            const productList = document.getElementById('productList');
+            const items = Array.from(productList.querySelectorAll('.product-item'));
+            
+            // 根据不同排序方式排序
+            switch(sortType) {
+                case 'default': // 综合排序
+                    // 默认排序，不做处理
+                    break;
+                    
+                case 'sales': // 销量排序
+                    items.sort((a, b) => {
+                        const salesA = parseInt(a.querySelector('.product-rating span:last-child').textContent.match(/\d+/)[0]);
+                        const salesB = parseInt(b.querySelector('.product-rating span:last-child').textContent.match(/\d+/)[0]);
+                        return salesB - salesA; // 降序排列
+                    });
+                    break;
+                    
+                case 'price': // 价格排序
+                    const priceOrder = document.querySelector('.filter-option[data-sort="price"] .filter-option-icon').textContent;
+                    items.sort((a, b) => {
+                        const priceA = parseInt(a.querySelector('.product-price').textContent.match(/\d+/)[0]);
+                        const priceB = parseInt(b.querySelector('.product-price').textContent.match(/\d+/)[0]);
+                        return priceOrder === '↑' ? priceA - priceB : priceB - priceA;
+                    });
+                    break;
+                    
+                case 'new': // 新品排序
+                    items.sort((a, b) => {
+                        const isNewA = a.querySelector('.product-tag')?.textContent === '新品' ? 1 : 0;
+                        const isNewB = b.querySelector('.product-tag')?.textContent === '新品' ? 1 : 0;
+                        return isNewB - isNewA;
+                    });
+                    break;
+            }
+            
+            // 重新排列DOM元素
+            items.forEach(item => {
+                productList.appendChild(item);
+            });
+        }
+        
+        // 搜索商品
+        function searchProducts(keyword) {
+            const productList = document.getElementById('productList');
+            const emptyState = document.getElementById('emptyState');
+            const items = productList.querySelectorAll('.product-item');
+            let hasMatchedProducts = false;
+            
+            items.forEach(item => {
+                const productName = item.querySelector('.product-name').textContent;
+                const productDesc = item.querySelector('.product-desc').textContent;
+                
+                // 检查商品名称或描述是否包含关键词
+                if (productName.toLowerCase().includes(keyword.toLowerCase()) || 
+                    productDesc.toLowerCase().includes(keyword.toLowerCase())) {
+                    item.style.display = 'block';
+                    hasMatchedProducts = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // 显示或隐藏空状态
+            if (hasMatchedProducts) {
+                productList.style.display = 'flex';
+                emptyState.style.display = 'none';
+            } else {
+                productList.style.display = 'none';
+                emptyState.style.display = 'flex';
+            }
+        }
+        
+        // 显示所有商品
+        function showAllProducts() {
+            const productList = document.getElementById('productList');
+            const emptyState = document.getElementById('emptyState');
+            const items = productList.querySelectorAll('.product-item');
+            
+            items.forEach(item => {
+                item.style.display = 'block';
+            });
+            
+            productList.style.display = 'flex';
+            emptyState.style.display = 'none';
+        }
+    </script>
+</body>
+</html> 

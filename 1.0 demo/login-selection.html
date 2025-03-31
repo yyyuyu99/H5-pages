@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>乡链 - 登录选择</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f7f7f7;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* iPhone 15 Pro Max 外壳 */
+        .device-container {
+            position: relative;
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 55px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        /* 顶部刘海 */
+        .notch {
+            position: absolute;
+            width: 180px;
+            height: 32px;
+            background: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 999;
+        }
+        
+        /* 底部指示条 */
+        .home-indicator {
+            position: absolute;
+            width: 135px;
+            height: 5px;
+            background: #fff;
+            border-radius: 3px;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        /* 屏幕 */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #F9F7F4;
+            border-radius: 45px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            color: #000;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .battery-icon {
+            width: 25px;
+            height: 12px;
+            border: 1px solid #000;
+            border-radius: 3px;
+            padding: 1px;
+            margin-left: 5px;
+            position: relative;
+        }
+        
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 6px;
+            background: #000;
+            right: -4px;
+            top: 3px;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .battery-level {
+            height: 100%;
+            width: 60%;
+            background: #000;
+            border-radius: 1px;
+        }
+        
+        /* 内容区域 */
+        .content {
+            height: calc(100% - 44px);
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            background-image: url('https://images.unsplash.com/photo-1595411425732-e49e26c310da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80&brightness=-95&saturation=-30&alpha=0.08');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px;
+        }
+        
+        /* 顶部LOGO区域 */
+        .logo-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #A1887F 0%, #8D6E63 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(141, 110, 99, 0.3);
+        }
+        
+        .logo-icon {
+            font-size: 40px;
+            color: white;
+        }
+        
+        .app-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        
+        .app-slogan {
+            font-size: 14px;
+            color: #666;
+            letter-spacing: 0.5px;
+        }
+        
+        /* 选择卡片容器 */
+        .selection-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* 选择卡片 */
+        .selection-card {
+            width: 100%;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .selection-card:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-content {
+            height: 100%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.1;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(141, 110, 99, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 16px;
+            color: #8D6E63;
+            font-size: 28px;
+            box-shadow: 0 4px 15px rgba(141, 110, 99, 0.15);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        
+        .card-description {
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+            max-width: 90%;
+            line-height: 1.5;
+        }
+        
+        .merchant-card .card-bg {
+            background-image: url('https://images.pexels.com/photos/6193171/pexels-photo-6193171.jpeg');
+        }
+        
+        .consumer-card .card-bg {
+            background-image: url('https://images.pexels.com/photos/4964328/pexels-photo-4964328.jpeg');
+        }
+        
+        /* 底部版权信息 */
+        .footer {
+            margin-top: auto;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+        }
+        
+        /* 装饰元素 */
+        .decorative-line {
+            height: 1px;
+            width: 60px;
+            background: linear-gradient(to right, transparent, rgba(141, 110, 99, 0.3), transparent);
+            margin: 8px 0;
+        }
+        
+        /* 按钮 */
+        .login-button {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 220px;
+            height: 44px;
+            background: linear-gradient(to right, #8D6E63, #A1887F);
+            border-radius: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(141, 110, 99, 0.3);
+            transition: transform 0.2s ease;
+        }
+        
+        .login-button:active {
+            transform: scale(0.97);
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <div class="notch"></div>
+        <div class="home-indicator"></div>
+        
+        <div class="screen">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-left">12:30</div>
+                <div class="status-right">
+                    <span style="margin-right: 5px;">5G</span>
+                    <div class="battery-icon">
+                        <div class="battery-level"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- Logo区域 -->
+                <div class="logo-container">
+                    <div class="app-logo">
+                        <div class="logo-icon">🌳</div>
+                    </div>
+                    <h1 class="app-title">乡链</h1>
+                    <div class="decorative-line"></div>
+                    <p class="app-slogan">小松塔·乡村振兴·非遗传承</p>
+                </div>
+                
+                <!-- 选择区域 -->
+                <div class="selection-container">
+                    <!-- 商户端卡片 -->
+                    <div class="selection-card merchant-card" id="merchantCard">
+                        <div class="card-bg"></div>
+                        <div class="card-content">
+                            <div class="card-icon">🏪</div>
+                            <h2 class="card-title">商户端</h2>
+                            <p class="card-description">展示您的文化产品、手工艺品和文化体验活动，连接更多消费者</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 消费者端卡片 -->
+                    <div class="selection-card consumer-card" id="consumerCard">
+                        <div class="card-bg"></div>
+                        <div class="card-content">
+                            <div class="card-icon">👤</div>
+                            <h2 class="card-title">消费者端</h2>
+                            <p class="card-description">探索特色文化产品，体验非遗活动，了解乡村文化故事</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 登录按钮 -->
+                <div class="login-button" id="loginButton">
+                    登录 / 注册
+                </div>
+                
+                <!-- 底部版权 -->
+                <div class="footer">
+                    © 2025 小松塔乡链平台 · 探索中国传统文化之美
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 商户端卡片点击事件
+        document.getElementById('merchantCard').addEventListener('click', function() {
+            document.querySelectorAll('.selection-card').forEach(card => {
+                card.style.opacity = '0.6';
+                card.style.transform = 'scale(0.95)';
+            });
+            this.style.opacity = '1';
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = '0 5px 20px rgba(141, 110, 99, 0.3)';
+            
+            // 更新登录按钮
+            const loginButton = document.getElementById('loginButton');
+            loginButton.textContent = '进入商户端';
+            loginButton.style.background = 'linear-gradient(to right, #795548, #8D6E63)';
+        });
+        
+        // 消费者端卡片点击事件
+        document.getElementById('consumerCard').addEventListener('click', function() {
+            document.querySelectorAll('.selection-card').forEach(card => {
+                card.style.opacity = '0.6';
+                card.style.transform = 'scale(0.95)';
+            });
+            this.style.opacity = '1';
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = '0 5px 20px rgba(141, 110, 99, 0.3)';
+            
+            // 更新登录按钮
+            const loginButton = document.getElementById('loginButton');
+            loginButton.textContent = '进入消费者端';
+            loginButton.style.background = 'linear-gradient(to right, #8D6E63, #A1887F)';
+        });
+        
+        // 登录按钮点击事件
+        document.getElementById('loginButton').addEventListener('click', function() {
+            const buttonText = this.textContent;
+            if (buttonText === '进入商户端') {
+                console.log('跳转到商户端登录页面');
+                alert('即将进入商户端');
+                // window.location.href = 'merchant-login.html';
+            } else if (buttonText === '进入消费者端') {
+                console.log('跳转到消费者端登录页面');
+                alert('即将进入消费者端');
+                window.location.href = 'index.html';
+            } else {
+                alert('请先选择登录身份');
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>城乡文化直连平台 - 文化体验</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f7f7f7;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* iPhone 15 Pro Max 外壳 */
+        .device-container {
+            position: relative;
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 55px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        /* 顶部刘海 */
+        .notch {
+            position: absolute;
+            width: 180px;
+            height: 32px;
+            background: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 999;
+        }
+        
+        /* 底部指示条 */
+        .home-indicator {
+            position: absolute;
+            width: 135px;
+            height: 5px;
+            background: #fff;
+            border-radius: 3px;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        /* 侧边按钮 */
+        .power-button {
+            position: absolute;
+            width: 3px;
+            height: 28px;
+            background: #222;
+            top: 130px;
+            right: -3px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        
+        .volume-up {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 125px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .volume-down {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 200px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        /* 屏幕 */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #F9F7F4;
+            border-radius: 45px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            color: #000;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .battery-icon {
+            width: 25px;
+            height: 12px;
+            border: 1px solid #000;
+            border-radius: 3px;
+            padding: 1px;
+            margin-left: 5px;
+            position: relative;
+        }
+        
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 6px;
+            background: #000;
+            right: -4px;
+            top: 3px;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .battery-level {
+            height: 100%;
+            width: 60%;
+            background: #000;
+            border-radius: 1px;
+        }
+        
+        /* 内容区域 */
+        .content {
+            height: calc(100% - 44px - 50px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background-image: url('https://images.unsplash.com/photo-1595411425732-e49e26c310da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80&brightness=-95&saturation=-30&alpha=0.08');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        /* 顶部导航栏 */
+        .nav-header {
+            position: sticky;
+            top: 0;
+            background: rgba(249, 247, 244, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 100;
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        
+        /* 搜索栏 */
+        .search-bar {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 10px;
+        }
+        
+        .search-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            color: #999;
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: #666;
+            background: transparent;
+        }
+        
+        /* 筛选分类 */
+        .filter-container {
+            margin-top: 10px;
+            position: relative;
+        }
+        
+        .filter-scroll {
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 5px;
+        }
+        
+        .filter-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .filter-items {
+            display: inline-flex;
+            gap: 10px;
+        }
+        
+        .filter-item {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            font-size: 13px;
+            color: #666;
+            border: 1px solid rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+        
+        .filter-item.active {
+            background: #8D6E63;
+            color: white;
+            border: 1px solid #8D6E63;
+        }
+        
+        /* 排序和筛选条 */
+        .sort-filter-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background: rgba(249, 247, 244, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: sticky;
+            top: 126px;
+            z-index: 90;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .sort-options {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .sort-option {
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sort-option.active {
+            color: #8D6E63;
+            font-weight: 500;
+        }
+        
+        .sort-option::after {
+            content: '';
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 4px;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #666;
+        }
+        
+        .sort-option.active::after {
+            border-top: 4px solid #8D6E63;
+        }
+        
+        .sort-option.asc::after {
+            border-top: 0;
+            border-bottom: 4px solid #8D6E63;
+        }
+        
+        .filter-button {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .filter-button .icon {
+            margin-right: 4px;
+            font-size: 14px;
+        }
+        
+        /* 体验项目列表 */
+        .experience-container {
+            padding: 16px;
+        }
+        
+        .experience-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .experience-item {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .experience-item:active {
+            transform: scale(0.98);
+        }
+        
+        .experience-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .experience-content {
+            padding: 14px;
+        }
+        
+        .experience-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .experience-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+        
+        .experience-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 5px;
+        }
+        
+        .experience-location {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .location-icon {
+            margin-right: 4px;
+            font-size: 14px;
+        }
+        
+        .experience-price {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .price-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #8D6E63;
+        }
+        
+        .price-unit {
+            font-size: 12px;
+            font-weight: normal;
+            color: #999;
+            margin-left: 2px;
+        }
+        
+        .experience-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .experience-tag {
+            font-size: 11px;
+            color: #8D6E63;
+            background: rgba(141, 110, 99, 0.1);
+            padding: 3px 8px;
+            border-radius: 100px;
+        }
+        
+        .experience-stats {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 8px;
+        }
+        
+        .experience-rating {
+            margin-right: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .rating-icon {
+            color: #FFB74D;
+            margin-right: 2px;
+        }
+        
+        .sold-count {
+            margin-left: 8px;
+        }
+        
+        /* 加载更多 */
+        .load-more {
+            text-align: center;
+            padding: 20px 0;
+            color: #8D6E63;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .load-more:active {
+            opacity: 0.8;
+        }
+        
+        /* 模拟图标 */
+        .icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: inherit;
+        }
+        
+        /* 页面装饰元素 */
+        .decorative-line {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(141, 110, 99, 0.2), transparent);
+            margin: 5px 30px 15px;
+        }
+        
+        /* 底部导航栏 */
+        .tab-bar {
+            height: 50px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 5px;
+            z-index: 10;
+            border-bottom-left-radius: 45px;
+            border-bottom-right-radius: 45px;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 25%;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+        
+        .tab-item:after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+        
+        .tab-icon {
+            font-size: 22px;
+            margin-bottom: 2px;
+            color: #999;
+        }
+        
+        .tab-item.active .tab-icon {
+            color: #8D6E63;
+        }
+        
+        .tab-text {
+            font-size: 10px;
+            color: #999;
+        }
+        
+        .tab-item.active .tab-text {
+            color: #8D6E63;
+        }
+        
+        /* 筛选面板 */
+        .filter-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .filter-panel.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        .filter-panel-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #F9F7F4;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 20px 16px 80px;
+            max-height: 85%;
+            overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .filter-panel.active .filter-panel-content {
+            transform: translateY(0);
+        }
+        
+        .filter-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .filter-panel-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .filter-close {
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .filter-section {
+            margin-bottom: 20px;
+        }
+        
+        .filter-section-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .filter-option {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            font-size: 13px;
+            color: #666;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        
+        .filter-option.active {
+            background: #8D6E63;
+            color: white;
+            border: 1px solid #8D6E63;
+        }
+        
+        .price-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .price-input {
+            flex: 1;
+            height: 36px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 0 10px;
+            font-size: 14px;
+            background: white;
+            color: #333;
+        }
+        
+        .price-separator {
+            color: #999;
+        }
+        
+        .rating-options {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .rating-option {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .rating-checkbox {
+            width: 18px;
+            height: 18px;
+            margin-right: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .rating-checkbox.active {
+            background: #8D6E63;
+            border-color: #8D6E63;
+        }
+        
+        .rating-checkbox.active::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .filter-reset, .filter-confirm {
+            flex: 1;
+            height: 44px;
+            border-radius: 22px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .filter-reset {
+            background: rgba(0, 0, 0, 0.05);
+            color: #666;
+        }
+        
+        .filter-confirm {
+            background: #8D6E63;
+            color: white;
+        }
+        
+        .filter-reset:active, .filter-confirm:active {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <div class="notch"></div>
+        <div class="home-indicator"></div>
+        <div class="power-button"></div>
+        <div class="volume-up"></div>
+        <div class="volume-down"></div>
+        
+        <div class="screen">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-left">12:30</div>
+                <div class="status-right">
+                    <span style="margin-right: 5px;">5G</span>
+                    <div class="battery-icon">
+                        <div class="battery-level"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 顶部导航栏 -->
+                <div class="nav-header">
+                    <div class="page-title">文化体验</div>
+                    <div class="search-bar">
+                        <div class="icon search-icon">🔍</div>
+                        <input type="text" class="search-input" placeholder="搜索民俗体验、手工艺、茶艺...">
+                    </div>
+                    <div class="filter-container">
+                        <div class="filter-scroll">
+                            <div class="filter-items">
+                                <div class="filter-item active">全部</div>
+                                <div class="filter-item">茶艺</div>
+                                <div class="filter-item">陶艺</div>
+                                <div class="filter-item">手工艺</div>
+                                <div class="filter-item">刺绣</div>
+                                <div class="filter-item">民族文化</div>
+                                <div class="filter-item">耕织文化</div>
+                                <div class="filter-item">传统节日</div>
+                                <div class="filter-item">美食制作</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 排序和筛选条 -->
+                <div class="sort-filter-bar">
+                    <div class="sort-options">
+                        <div class="sort-option active">推荐</div>
+                        <div class="sort-option">价格</div>
+                        <div class="sort-option">热度</div>
+                        <div class="sort-option">最新</div>
+                    </div>
+                    <div class="filter-button">
+                        <span class="icon">🔍</span>筛选
+                    </div>
+                </div>
+                
+                <!-- 文化体验列表区域 -->
+                <div class="experience-container">
+                    <div class="experience-list">
+                        <!-- 体验项目1 -->
+                        <div class="experience-item">
+                            <img src="https://bpic.588ku.com/video_library/cover/24/05/17/001a6ee93fda6e4e9731a851d577d102_snapshot_t0.jpg" class="experience-image" alt="茶艺体验">
+                            <div class="experience-content">
+                                <div class="experience-title">古法茶艺体验课程</div>
+                                <div class="experience-desc">深入了解中国茶文化，亲手体验传统的茶艺礼仪与泡法，品尝多种顶级名茶，聆听茶道大师讲述茶的前世今生</div>
+                                <div class="experience-tags">
+                                    <div class="experience-tag">地理标志</div>
+                                    <div class="experience-tag">非遗传承</div>
+                                    <div class="experience-tag">可DIY</div>
+                                </div>
+                                <div class="experience-stats">
+                                    <div class="experience-rating">
+                                        <span class="rating-icon">★</span>4.9
+                                    </div>
+                                    <div class="sold-count">已售1823</div>
+                                </div>
+                                <div class="experience-meta">
+                                    <div class="experience-location">
+                                        <span class="location-icon">📍</span>云南普洱
+                                    </div>
+                                    <div class="experience-price">
+                                        <div class="price-value">¥268<span class="price-unit">/人</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 体验项目2 -->
+                        <div class="experience-item">
+                            <img src="https://images.pexels.com/photos/357428/pexels-photo-357428.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="experience-image" alt="景德镇陶艺">
+                            <div class="experience-content">
+                                <div class="experience-title">景德镇传统陶艺制作</div>
+                                <div class="experience-desc">在千年瓷都，由景德镇国家级陶瓷非遗传承人带领，体验完整的陶瓷制作流程，从拉坯、成型到釉彩，制作专属的艺术品</div>
+                                <div class="experience-tags">
+                                    <div class="experience-tag">国家级非遗</div>
+                                    <div class="experience-tag">大师指导</div>
+                                    <div class="experience-tag">包邮寄送</div>
+                                </div>
+                                <div class="experience-stats">
+                                    <div class="experience-rating">
+                                        <span class="rating-icon">★</span>4.8
+                                    </div>
+                                    <div class="sold-count">已售945</div>
+                                </div>
+                                <div class="experience-meta">
+                                    <div class="experience-location">
+                                        <span class="location-icon">📍</span>江西景德镇
+                                    </div>
+                                    <div class="experience-price">
+                                        <div class="price-value">¥298<span class="price-unit">/人</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 体验项目3 -->
+                        <div class="experience-item">
+                            <img src="https://b0.bdstatic.com/90f79fabd0deb98704ed1231430a13c2.jpg" class="experience-image" alt="苗绣体验">
+                            <div class="experience-content">
+                                <div class="experience-title">苗族传统刺绣课程</div>
+                                <div class="experience-desc">在黔东南苗寨，跟随苗族绣娘学习具有数千年历史的苗绣技艺，了解图案背后的文化含义，亲手制作精美的苗绣作品</div>
+                                <div class="experience-tags">
+                                    <div class="experience-tag">国家级非遗</div>
+                                    <div class="experience-tag">原生态体验</div>
+                                    <div class="experience-tag">含食宿</div>
+                                </div>
+                                <div class="experience-stats">
+                                    <div class="experience-rating">
+                                        <span class="rating-icon">★</span>4.9
+                                    </div>
+                                    <div class="sold-count">已售562</div>
+                                </div>
+                                <div class="experience-meta">
+                                    <div class="experience-location">
+                                        <span class="location-icon">📍</span>贵州黔东南
+                                    </div>
+                                    <div class="experience-price">
+                                        <div class="price-value">¥368<span class="price-unit">/人</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 体验项目4 -->
+                        <div class="experience-item">
+                            <img src="https://clubimg.club.vmall.com/dl/huafans/pic/2019/10/23/e7282bbfa32f7ef8be72598432a95d7f_1571789493095.jpeg" class="experience-image" alt="油纸伞制作">
+                            <div class="experience-content">
+                                <div class="experience-title">江南油纸伞手工制作</div>
+                                <div class="experience-desc">体验中国传统伞艺，从选材、裁剪、糊伞到彩绘，全过程感受江南古典工艺的精细与美感，带走一把独一无二的手工艺品</div>
+                                <div class="experience-tags">
+                                    <div class="experience-tag">省级非遗</div>
+                                    <div class="experience-tag">全流程体验</div>
+                                    <div class="experience-tag">可绘制定制图案</div>
+                                </div>
+                                <div class="experience-stats">
+                                    <div class="experience-rating">
+                                        <span class="rating-icon">★</span>4.7
+                                    </div>
+                                    <div class="sold-count">已售789</div>
+                                </div>
+                                <div class="experience-meta">
+                                    <div class="experience-location">
+                                        <span class="location-icon">📍</span>浙江杭州
+                                    </div>
+                                    <div class="experience-price">
+                                        <div class="price-value">¥228<span class="price-unit">/人</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 体验项目5 -->
+                        <div class="experience-item">
+                            <img src="https://img2.baidu.com/it/u=1807142068,2496084194&fm=253&fmt=auto&app=120&f=JPEG?w=751&h=500" class="experience-image" alt="传统酿酒">
+                            <div class="experience-content">
+                                <div class="experience-title">传统黄酒酿造体验</div>
+                                <div class="experience-desc">探寻中国古老的黄酒酿造工艺，从选料、糯米蒸煮、曲种接种到发酵、装坛，完整体验千年不变的酿造技艺</div>
+                                <div class="experience-tags">
+                                    <div class="experience-tag">国家级非遗</div>
+                                    <div class="experience-tag">专属定制</div>
+                                    <div class="experience-tag">限量体验</div>
+                                </div>
+                                <div class="experience-stats">
+                                    <div class="experience-rating">
+                                        <span class="rating-icon">★</span>4.9
+                                    </div>
+                                    <div class="sold-count">已售415</div>
+                                </div>
+                                <div class="experience-meta">
+                                    <div class="experience-location">
+                                        <span class="location-icon">📍</span>浙江绍兴
+                                    </div>
+                                    <div class="experience-price">
+                                        <div class="price-value">¥388<span class="price-unit">/人</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="load-more">加载更多...</div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="tab-bar">
+                <div class="tab-item">
+                    <div class="icon tab-icon">🏡</div>
+                    <div class="tab-text">首页</div>
+                </div>
+                <div class="tab-item active">
+                    <div class="icon tab-icon">🧶</div>
+                    <div class="tab-text">体验</div>
+                </div>
+                <div class="tab-item">
+                    <div class="icon tab-icon">🗺️</div>
+                    <div class="tab-text">路线</div>
+                </div>
+                <div class="tab-item">
+                    <div class="icon tab-icon">👤</div>
+                    <div class="tab-text">我的</div>
+                </div>
+            </div>
+            
+            <!-- 筛选面板 -->
+            <div class="filter-panel" id="filterPanel">
+                <div class="filter-panel-content">
+                    <div class="filter-panel-header">
+                        <div class="filter-panel-title">筛选条件</div>
+                        <div class="filter-close" id="filterClose">×</div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <div class="filter-section-title">体验类型</div>
+                        <div class="filter-options">
+                            <div class="filter-option active">全部</div>
+                            <div class="filter-option">茶艺</div>
+                            <div class="filter-option">陶艺</div>
+                            <div class="filter-option">手工编织</div>
+                            <div class="filter-option">刺绣</div>
+                            <div class="filter-option">美食制作</div>
+                            <div class="filter-option">民间艺术</div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <div class="filter-section-title">价格区间</div>
+                        <div class="price-range">
+                            <input type="number" class="price-input" placeholder="最低价" min="0">
+                            <span class="price-separator">至</span>
+                            <input type="number" class="price-input" placeholder="最高价" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <div class="filter-section-title">地区</div>
+                        <div class="filter-options">
+                            <div class="filter-option active">全部</div>
+                            <div class="filter-option">云南</div>
+                            <div class="filter-option">贵州</div>
+                            <div class="filter-option">四川</div>
+                            <div class="filter-option">浙江</div>
+                            <div class="filter-option">江西</div>
+                            <div class="filter-option">广西</div>
+                            <div class="filter-option">福建</div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <div class="filter-section-title">评分要求</div>
+                        <div class="rating-options">
+                            <div class="rating-option">
+                                <div class="rating-checkbox"></div>
+                                <span>4分以上</span>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-checkbox"></div>
+                                <span>4.5分以上</span>
+                            </div>
+                            <div class="rating-option">
+                                <div class="rating-checkbox"></div>
+                                <span>4.8分以上</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <div class="filter-section-title">特色筛选</div>
+                        <div class="filter-options">
+                            <div class="filter-option">非遗传承</div>
+                            <div class="filter-option">可带走作品</div>
+                            <div class="filter-option">含食宿</div>
+                            <div class="filter-option">亲子适宜</div>
+                            <div class="filter-option">大师指导</div>
+                            <div class="filter-option">纯手工制作</div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-buttons">
+                        <div class="filter-reset" id="filterReset">重置</div>
+                        <div class="filter-confirm" id="filterConfirm">确定</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 为底部导航添加点击事件
+        const tabItems = document.querySelectorAll('.tab-item');
+        tabItems.forEach(item => {
+            item.addEventListener('click', function() {
+                tabItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 页面切换逻辑
+                const tabText = this.querySelector('.tab-text').textContent;
+                switch(tabText) {
+                    case '首页':
+                        window.location.href = 'index.html';
+                        break;
+                    case '体验':
+                        // 已经在当前页面
+                        break;
+                    case '路线':
+                        // 将来可以跳转到路线页面
+                        console.log('路线页面尚未实现');
+                        break;
+                    case '我的':
+                        // 将来可以跳转到个人中心页面
+                        console.log('个人中心页面尚未实现');
+                        break;
+                }
+            });
+        });
+
+        // 为分类筛选添加点击事件
+        const filterItems = document.querySelectorAll('.filter-item');
+        filterItems.forEach(item => {
+            item.addEventListener('click', function() {
+                filterItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                // 这里可以添加筛选内容的逻辑
+                console.log('选择分类：', this.textContent);
+            });
+        });
+
+        // 为排序选项添加点击事件
+        const sortOptions = document.querySelectorAll('.sort-option');
+        sortOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // 如果点击的不是当前激活项，则设为激活并默认降序
+                if (!this.classList.contains('active')) {
+                    sortOptions.forEach(o => o.classList.remove('active', 'asc'));
+                    this.classList.add('active');
+                } else {
+                    // 如果点击的是当前激活项，则切换升降序
+                    this.classList.toggle('asc');
+                }
+                console.log('排序方式：', this.textContent, this.classList.contains('asc') ? '升序' : '降序');
+            });
+        });
+
+        // 筛选按钮点击事件
+        document.querySelector('.filter-button').addEventListener('click', function() {
+            console.log('打开筛选面板');
+            document.getElementById('filterPanel').classList.add('active');
+        });
+
+        // 筛选面板关闭按钮
+        document.getElementById('filterClose').addEventListener('click', function() {
+            document.getElementById('filterPanel').classList.remove('active');
+        });
+
+        // 点击筛选面板外部关闭
+        document.getElementById('filterPanel').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+
+        // 筛选面板选项点击事件
+        const filterPanelOptions = document.querySelectorAll('.filter-option');
+        filterPanelOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // 如果是在同一组选项中，则切换当前选中状态
+                const parentOptions = Array.from(this.parentElement.children);
+                
+                // 检查点击的是否是"全部"选项
+                if (this.textContent === '全部') {
+                    // 如果点击"全部"，则只选中"全部"，取消其他所有选中
+                    parentOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                } else {
+                    // 如果点击的不是"全部"，则取消"全部"的选中状态
+                    const allOption = parentOptions.find(opt => opt.textContent === '全部');
+                    if (allOption) {
+                        allOption.classList.remove('active');
+                    }
+                    
+                    // 切换当前选项的选中状态
+                    this.classList.toggle('active');
+                    
+                    // 如果没有选中任何选项，则自动选中"全部"
+                    const hasActive = parentOptions.some(opt => opt.classList.contains('active'));
+                    if (!hasActive && allOption) {
+                        allOption.classList.add('active');
+                    }
+                }
+            });
+        });
+
+        // 评分选项点击事件
+        const ratingOptions = document.querySelectorAll('.rating-option');
+        ratingOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const checkbox = this.querySelector('.rating-checkbox');
+                checkbox.classList.toggle('active');
+            });
+        });
+
+        // 重置按钮点击事件
+        document.getElementById('filterReset').addEventListener('click', function() {
+            // 重置所有选项
+            document.querySelectorAll('.filter-options').forEach(optionGroup => {
+                // 找到每组中的"全部"选项并激活，其他选项取消激活
+                Array.from(optionGroup.children).forEach(option => {
+                    if (option.textContent === '全部') {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+            });
+            
+            // 重置价格输入
+            document.querySelectorAll('.price-input').forEach(input => {
+                input.value = '';
+            });
+            
+            // 重置评分选项
+            document.querySelectorAll('.rating-checkbox').forEach(checkbox => {
+                checkbox.classList.remove('active');
+            });
+        });
+
+        // 确定按钮点击事件
+        document.getElementById('filterConfirm').addEventListener('click', function() {
+            // 收集所有选中的筛选条件
+            const filters = {
+                types: [],
+                regions: [],
+                priceRange: {
+                    min: document.querySelectorAll('.price-input')[0].value || null,
+                    max: document.querySelectorAll('.price-input')[1].value || null
+                },
+                ratings: [],
+                features: []
+            };
+            
+            // 收集类型筛选
+            document.querySelectorAll('.filter-section').forEach(section => {
+                const title = section.querySelector('.filter-section-title').textContent;
+                const options = section.querySelectorAll('.filter-option.active');
+                
+                if (title === '体验类型') {
+                    options.forEach(option => filters.types.push(option.textContent));
+                } else if (title === '地区') {
+                    options.forEach(option => filters.regions.push(option.textContent));
+                } else if (title === '特色筛选') {
+                    options.forEach(option => filters.features.push(option.textContent));
+                }
+            });
+            
+            // 收集评分筛选
+            document.querySelectorAll('.rating-checkbox.active').forEach(checkbox => {
+                filters.ratings.push(checkbox.nextElementSibling.textContent);
+            });
+            
+            console.log('应用筛选条件:', filters);
+            
+            // 关闭筛选面板
+            document.getElementById('filterPanel').classList.remove('active');
+            
+            // 模拟筛选结果
+            setTimeout(() => {
+                alert('筛选条件已应用');
+            }, 300);
+        });
+
+        // 为体验项目添加点击事件
+        const experienceItems = document.querySelectorAll('.experience-item');
+        experienceItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const title = this.querySelector('.experience-title').textContent;
+                console.log('点击了体验项目：', title);
+                // 这里可以添加跳转到详情页的逻辑
+            });
+        });
+
+        // 加载更多按钮点击事件
+        document.querySelector('.load-more').addEventListener('click', function() {
+            console.log('加载更多体验项目');
+            // 这里可以添加加载更多数据的逻辑
+            this.textContent = '加载中...';
+            setTimeout(() => {
+                this.textContent = '加载更多...';
+                // 模拟加载失败
+                alert('已显示全部内容');
+            }, 1500);
+        });
+    </script>
+</body>
+</html> 

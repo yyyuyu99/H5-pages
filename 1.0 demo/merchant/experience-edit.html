@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>城乡文化直连平台 - 文化体验编辑</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* iPhone 15 Pro Max 外壳 */
+        .device-container {
+            position: relative;
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 40px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+            padding: 10px;
+            overflow: hidden;
+            box-sizing: content-box;
+            max-width: 100%;
+        }
+        
+        /* 顶部刘海 */
+        .notch {
+            position: absolute;
+            width: 180px;
+            height: 32px;
+            background: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 999;
+        }
+        
+        /* 底部指示条 */
+        .home-indicator {
+            position: absolute;
+            width: 135px;
+            height: 5px;
+            background: #fff;
+            border-radius: 3px;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        /* 侧边按钮 */
+        .power-button {
+            position: absolute;
+            width: 3px;
+            height: 28px;
+            background: #222;
+            top: 130px;
+            right: -3px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        
+        .volume-up {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 125px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .volume-down {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 200px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        /* 屏幕 */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #F9F7F4;
+            border-radius: 28px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+            box-sizing: border-box;
+            padding-bottom: 70px;
+        }
+        
+        /* 自定义滚动条样式 */
+        .screen::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .screen::-webkit-scrollbar-track {
+            background: transparent;
+            margin-right: 5px;
+        }
+        
+        .screen::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            border: 2px solid transparent;
+        }
+        
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px 28px 0 0;
+        }
+        
+        .status-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .battery-icon {
+            width: 25px;
+            height: 12px;
+            border: 1px solid #333;
+            border-radius: 3px;
+            padding: 1px;
+            margin-left: 5px;
+            position: relative;
+        }
+        
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 6px;
+            background: #333;
+            right: -4px;
+            top: 3px;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .battery-level {
+            height: 100%;
+            width: 60%;
+            background: #333;
+            border-radius: 1px;
+        }
+        
+        /* 顶部导航栏 */
+        .nav-bar {
+            height: 56px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            margin-top: 44px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 99;
+        }
+        
+        .back-button {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            color: #8D6E63;
+            cursor: pointer;
+        }
+        
+        .nav-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .save-button {
+            font-size: 16px;
+            color: #8D6E63;
+            cursor: pointer;
+        }
+        
+        /* 表单容器 */
+        .form-container {
+            padding: 15px;
+            margin-bottom: 80px; /* 确保底部有足够间距 */
+        }
+        
+        .form-section {
+            margin-bottom: 24px;
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            background: #8D6E63;
+            left: 0;
+            bottom: -8px;
+            border-radius: 3px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .half {
+            flex: 1;
+            min-width: 140px;
+        }
+        
+        label {
+            font-size: 14px;
+            color: #666;
+            display: block;
+            margin-bottom: 6px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            background: #f9f9f9;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #8D6E63;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(141, 110, 99, 0.1);
+        }
+        
+        .image-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .upload-preview {
+            width: 100%;
+            height: 180px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        
+        .upload-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .upload-button {
+            padding: 8px 16px;
+            background: rgba(141, 110, 99, 0.1);
+            color: #8D6E63;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-button:hover {
+            background: rgba(141, 110, 99, 0.2);
+        }
+        
+        /* AI工具栏 */
+        .ai-toolbar {
+            position: absolute;
+            bottom: 80px;
+            right: 15px;
+            background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%);
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(141, 110, 99, 0.4);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(141, 110, 99, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(141, 110, 99, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(141, 110, 99, 0);
+            }
+        }
+        
+        /* AI工具栏激活状态 */
+        .ai-toolbar.active {
+            width: calc(100% - 32px);
+            height: 400px;
+            bottom: 80px;
+            right: 16px;
+            border-radius: 20px;
+            display: block;
+        }
+        
+        /* AI工具栏图标 */
+        .ai-toolbar-icon {
+            font-size: 24px;
+            color: white;
+        }
+        
+        /* AI关闭按钮 */
+        .ai-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 12px;
+            background-color: #f4f4f4;
+            color: #333;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .ai-toolbar.active .ai-close {
+            display: flex;
+        }
+        
+        /* AI内容 */
+        .ai-content {
+            display: none;
+            padding: 15px;
+            color: white;
+        }
+        
+        .ai-toolbar.active .ai-content {
+            display: block;
+        }
+        
+        /* AI标题 */
+        .ai-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            margin-top: 5px;
+            text-align: center;
+        }
+        
+        /* AI工具列表 */
+        .ai-tools {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        /* AI工具项 */
+        .ai-tool {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .ai-tool:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* AI工具图标 */
+        .ai-tool-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        /* AI工具名称 */
+        .ai-tool-name {
+            font-size: 14px;
+        }
+        
+        /* AI生成内容弹窗 */
+        .ai-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .ai-modal-content {
+            width: 90%;
+            max-height: 80%;
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .ai-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .ai-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+        }
+        
+        .ai-output {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 16px;
+        }
+        
+        .ai-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .ai-button {
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .ai-button.apply {
+            background: #8D6E63;
+            color: white;
+        }
+        
+        .ai-button.cancel {
+            background: rgba(0, 0, 0, 0.1);
+            color: #666;
+        }
+        
+        .content-area {
+            height: calc(100% - 100px);
+            overflow-y: auto;
+            margin-top: 0;
+        }
+        
+        /* 底部导航容器样式 */
+        .bottom-nav-container {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 345px;
+            height: 60px;
+            z-index: 1000;
+        }
+        
+        .bottom-nav-new {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 18px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 25%;
+            color: #666;
+            font-size: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .nav-item.active {
+            color: #1b55e7;
+            font-weight: 600;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+        
+        .nav-item:hover {
+            color: #1b55e7;
+        }
+        
+        /* 隐藏原来的底部导航 */
+        .bottom-nav {
+            display: none !important;
+        }
+        
+        /* 增大活动简介输入框 */
+        textarea.form-input {
+            min-height: 120px;
+            line-height: 1.6;
+            padding: 12px;
+        }
+        
+        .activity-description textarea {
+            min-height: 150px !important;
+            font-size: 14px;
+        }
+        
+        /* 确保只有一个滚动条 */
+        body {
+            overflow: hidden;
+        }
+        
+        /* 设置设备容器中的内容不要出现双滚动条 */
+        .device-container .screen {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        /* 文本框样式 - 增加高度并禁止拖拽 */
+        .form-textarea {
+            width: 100%;
+            min-height: 150px;
+            height: 150px;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            resize: none;
+            background: #FCFCFC;
+            transition: all 0.3s;
+        }
+        
+        /* 调整日期框宽度保证不超出 */
+        .date-input {
+            width: 100%;
+            height: 44px;
+            padding: 0 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            background: #FCFCFC;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        /* 调整活动简介文本区域 */
+        #description {
+            height: 150px;
+            min-height: 150px;
+            resize: none;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <!-- 顶部刘海 -->
+        <div class="notch"></div>
+        
+        <!-- 侧边按钮 -->
+        <div class="power-button"></div>
+        <div class="volume-up"></div>
+        <div class="volume-down"></div>
+        
+        <!-- 底部指示条 -->
+        <div class="home-indicator"></div>
+        
+        <div class="screen">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-left">12:30</div>
+                <div class="status-right">
+                    <span style="margin-right: 5px;">5G</span>
+                    <div class="battery-icon">
+                        <div class="battery-level"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 顶部导航 -->
+            <div class="nav-bar">
+                <div class="back-button">
+                    &lt; 返回
+                </div>
+                <div class="nav-title">编辑文化体验</div>
+                <div class="save-button">保存</div>
+            </div>
+            
+            <!-- 编辑内容区域 -->
+            <div class="content-area">
+                <div class="form-container">
+                    <!-- 封面图片 -->
+                    <div class="form-section">
+                        <div class="section-title">封面图片</div>
+                        <div class="image-upload">
+                            <div class="upload-preview">
+                                <img src="https://images.unsplash.com/photo-1520095972714-909e91b038e5?w=500" id="coverPreview">
+                            </div>
+                            <div class="upload-button">更换图片</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 基本信息 -->
+                    <div class="form-section">
+                        <div class="section-title">基本信息</div>
+                        <div class="form-group">
+                            <label for="title">活动名称</label>
+                            <input type="text" id="title" placeholder="请输入活动名称" value="传统香囊制作体验课程">
+                        </div>
+                        <div class="form-group">
+                            <label for="category">活动类别</label>
+                            <select id="category">
+                                <option>手工艺</option>
+                                <option>美食</option>
+                                <option>非遗技艺</option>
+                                <option>农事体验</option>
+                                <option>民俗活动</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="location">活动地点</label>
+                            <input type="text" id="location" placeholder="请输入活动地点" value="灵山镇文化中心">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="startDate">开始日期</label>
+                                <input type="date" id="startDate" value="2023-08-05">
+                            </div>
+                            <div class="form-group half">
+                                <label for="endDate">结束日期</label>
+                                <input type="date" id="endDate" value="2023-09-05">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="price">活动价格</label>
+                                <input type="number" id="price" placeholder="价格" value="98">
+                            </div>
+                            <div class="form-group half">
+                                <label for="capacity">活动容量</label>
+                                <input type="number" id="capacity" placeholder="人数" value="20">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 活动详情 -->
+                    <div class="form-section">
+                        <div class="section-title">活动详情</div>
+                        <div class="form-group">
+                            <label for="description">活动简介</label>
+                            <textarea id="description" placeholder="请输入活动简介" rows="3">香囊是我国传统手工艺品，历史悠久。本次活动将带领大家体验传统香囊制作技艺，了解香囊文化历史，制作专属自己的特色香囊。</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI助手工具箱 -->
+            <div class="ai-toolbar" id="aiToolbar">
+                <div class="ai-toolbar-icon">🤖</div>
+                <div class="ai-close" id="aiClose">✕</div>
+                <div class="ai-content">
+                    <div class="ai-title">AI助手工具箱</div>
+                    <div class="ai-tools">
+                        <div class="ai-tool" data-tool="description">
+                            <div class="ai-tool-icon">📝</div>
+                            <div class="ai-tool-name">生成活动介绍</div>
+                        </div>
+                        <div class="ai-tool" data-tool="schedule">
+                            <div class="ai-tool-icon">🗓️</div>
+                            <div class="ai-tool-name">生成活动流程</div>
+                        </div>
+                        <div class="ai-tool" data-tool="marketing">
+                            <div class="ai-tool-icon">📣</div>
+                            <div class="ai-tool-name">生成宣传文案</div>
+                        </div>
+                        <div class="ai-tool" data-tool="highlight">
+                            <div class="ai-tool-icon">✨</div>
+                            <div class="ai-tool-name">生成亮点介绍</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI生成内容弹窗 -->
+            <div class="ai-modal" id="aiModal">
+                <div class="ai-modal-content">
+                    <div class="ai-modal-close" id="modalClose">✕</div>
+                    <div class="ai-modal-title" id="modalTitle">生成内容</div>
+                    <div class="ai-output" id="aiOutput"></div>
+                    <div class="ai-buttons">
+                        <div class="ai-button apply" id="applyButton">应用内容</div>
+                        <div class="ai-button cancel" id="cancelButton">取消</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航容器 - 放在screen容器外但在device-container内 -->
+        <div class="bottom-nav-container">
+            <div class="bottom-nav-new">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">📦</div>
+                    <div>商品</div>
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-icon">🎭</div>
+                    <div>体验</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👤</div>
+                    <div>我的</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const backButton = document.querySelector('.back-button');
+            const saveButton = document.querySelector('.save-button');
+            const aiToolbar = document.getElementById('aiToolbar');
+            const aiClose = document.getElementById('aiClose');
+            const aiTools = document.querySelectorAll('.ai-tool');
+            const aiModal = document.getElementById('aiModal');
+            const modalClose = document.getElementById('modalClose');
+            const modalTitle = document.getElementById('modalTitle');
+            const aiOutput = document.getElementById('aiOutput');
+            const applyButton = document.getElementById('applyButton');
+            const cancelButton = document.getElementById('cancelButton');
+            const description = document.getElementById('description');
+            const titleInput = document.getElementById('title');
+            const categorySelect = document.getElementById('category');
+            
+            // 返回和保存按钮事件
+            backButton.addEventListener('click', function() {
+                alert('返回到体验活动列表');
+            });
+            
+            saveButton.addEventListener('click', function() {
+                alert('活动信息已保存');
+            });
+            
+            // AI工具箱打开和关闭
+            aiToolbar.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    this.classList.add('active');
+                }
+            });
+            
+            aiClose.addEventListener('click', function(e) {
+                e.stopPropagation();
+                aiToolbar.classList.remove('active');
+            });
+            
+            // AI工具点击事件
+            aiTools.forEach(tool => {
+                tool.addEventListener('click', function() {
+                    const toolType = this.getAttribute('data-tool');
+                    generateContent(toolType);
+                });
+            });
+            
+            // 关闭弹窗
+            modalClose.addEventListener('click', function() {
+                aiModal.style.display = 'none';
+            });
+            
+            cancelButton.addEventListener('click', function() {
+                aiModal.style.display = 'none';
+            });
+            
+            // 应用生成内容
+            applyButton.addEventListener('click', function() {
+                const contentType = modalTitle.getAttribute('data-type');
+                if (contentType === 'description') {
+                    description.value = aiOutput.textContent;
+                }
+                aiModal.style.display = 'none';
+                alert('内容已应用');
+            });
+            
+            // 生成AI内容
+            function generateContent(toolType) {
+                const activityName = titleInput.value;
+                const category = categorySelect.value;
+                
+                let title = '';
+                let content = '';
+                
+                // 模拟加载
+                aiModal.style.display = 'flex';
+                modalTitle.setAttribute('data-type', toolType);
+                
+                switch(toolType) {
+                    case 'description':
+                        title = '生成活动介绍';
+                        aiOutput.innerHTML = '正在生成活动介绍...';
+                        setTimeout(() => {
+                            content = generateDescription(activityName, category);
+                            aiOutput.textContent = content;
+                        }, 1500);
+                        break;
+                    case 'schedule':
+                        title = '生成活动流程';
+                        aiOutput.innerHTML = '正在生成活动流程...';
+                        setTimeout(() => {
+                            content = generateSchedule(activityName, category);
+                            aiOutput.textContent = content;
+                        }, 1500);
+                        break;
+                    case 'marketing':
+                        title = '生成宣传文案';
+                        aiOutput.innerHTML = '正在生成宣传文案...';
+                        setTimeout(() => {
+                            content = generateMarketing(activityName, category);
+                            aiOutput.textContent = content;
+                        }, 1500);
+                        break;
+                    case 'highlight':
+                        title = '生成亮点介绍';
+                        aiOutput.innerHTML = '正在生成亮点介绍...';
+                        setTimeout(() => {
+                            content = generateHighlights(activityName, category);
+                            aiOutput.textContent = content;
+                        }, 1500);
+                        break;
+                }
+                
+                modalTitle.textContent = title;
+            }
+            
+            // AI生成活动介绍
+            function generateDescription(name, category) {
+                if (category === '手工艺' || name.includes('香囊')) {
+                    return `传统香囊制作是中国非物质文化遗产的重要组成部分，拥有悠久的历史。在这个体验活动中，参与者将在专业老师的指导下，了解香囊的文化历史、材料特点和制作技艺。
+
+您不仅可以亲手制作一款专属于自己的香囊，还将学习传统香料的调配方法，感受中国传统手工艺的魅力。各种精美的丝线、布料和装饰物让您充分发挥创意，打造独一无二的作品。
+
+参与本次活动，是传承文化、放松心情的绝佳选择，也是了解中国传统文化的窗口。每位参与者都可以将自己制作的香囊带回家，作为美好的纪念或送给亲友的独特礼物。`;
+                } else if (category === '美食' || name.includes('美食')) {
+                    return `本次活动将带您深入了解地道的乡村美食文化，在专业厨师的指导下亲手制作传统美食。从食材选购到烹饪技巧，每一步都将得到细致讲解。
+
+通过这次体验，您不仅能学习到不为人知的烹饪秘诀，还能了解每道菜背后的文化故事和地方特色。活动中，您将有机会品尝自己的劳动成果，感受舌尖上的乡村风味。
+
+无论您是美食爱好者还是想要学习烹饪技巧的初学者，这次活动都将为您提供难忘的体验和宝贵的技能。`;
+                } else {
+                    return `这是一次沉浸式的文化体验活动，旨在让参与者近距离接触和了解传统文化的魅力。在专业人士的指导下，您将学习相关知识和技能，亲身参与创作过程。
+
+活动过程中，我们注重理论与实践相结合，为您提供全方位的文化体验。通过互动环节，激发您的创造力和对传统文化的新理解。
+
+参与本次活动不仅能获得新技能，还能与志同道合的朋友交流互动，共同度过一段充实而难忘的时光。活动结束后，您将带走自己的作品作为特别的纪念。`;
+                }
+            }
+            
+            // AI生成活动流程
+            function generateSchedule(name, category) {
+                if (category === '手工艺' || name.includes('香囊')) {
+                    return `活动流程：
+
+1. 欢迎介绍（15分钟）
+   - 老师自我介绍和活动概述
+   - 香囊历史文化简介
+   - 参与者相互认识
+
+2. 材料准备与讲解（20分钟）
+   - 展示各类香料、布料和装饰物
+   - 讲解各种材料的特点和用途
+   - 香料搭配方法介绍
+
+3. 基础技法教学（30分钟）
+   - 基础缝制技巧演示
+   - 香囊造型设计方法
+   - 装饰技巧展示
+
+4. 实践制作（60分钟）
+   - 个人香囊设计与制作
+   - 老师巡回指导
+   - 问题解答与技巧调整
+
+5. 作品展示与分享（15分钟）
+   - 每位参与者展示自己的作品
+   - 分享制作心得
+   - 老师点评与建议
+
+6. 拍照留念与活动结束（10分钟）`;
+                } else {
+                    return `活动流程：
+
+1. 签到与欢迎（15分钟）
+   - 活动介绍和简短破冰
+   - 老师自我介绍
+   - 活动目标和流程概述
+
+2. 背景知识讲解（25分钟）
+   - 文化历史背景介绍
+   - 相关知识点讲解
+   - 示范展示
+
+3. 基础技能教学（30分钟）
+   - 基本技巧演示
+   - 注意事项说明
+   - 小组练习
+
+4. 实践创作环节（60分钟）
+   - 个人或小组创作时间
+   - 老师巡回指导
+   - 技术难点解答
+
+5. 作品完善（20分钟）
+   - 作品修改与完善
+   - 最终处理与加工
+   - 作品准备展示
+
+6. 成果分享与交流（20分钟）
+   - 作品展示与介绍
+   - 参与者互相交流
+   - 活动总结与合影`;
+                }
+            }
+            
+            // AI生成宣传文案
+            function generateMarketing(name, category) {
+                if (category === '手工艺' || name.includes('香囊')) {
+                    return `📣 【传统香囊制作体验 · 非遗文化传承】
+
+🌟 你是否曾被古代仕女腰间飘香的香囊所吸引？
+🌟 想不想亲手制作一个专属于你的传统香囊？
+🌟 寻找一种既能放松身心又能收获技能的周末活动？
+
+📅 8月5日起，每周六下午14:00-16:30
+📍 灵山镇文化中心（交通便利，环境雅致）
+
+✨ 活动亮点 ✨
+👉 非遗传承人亲自授课，零基础也能学会
+👉 纯天然香料调配，感受传统香文化魅力
+👉 精美材料套装，制作专属于你的独特香囊
+👉 小班授课，每班限额20人，保证教学质量
+
+💰 活动优惠价：¥98/人（原价¥128）
+🎁 早鸟优惠：8月1日前报名立减¥20
+
+📱 扫码预约或致电报名：XXX-XXXX-XXXX
+🔺 名额有限，报满即止！`;
+                } else {
+                    return `📣 【限时体验 · 文化盛宴】
+
+🌈 想要一次与众不同的文化体验？
+🌈 想要收获独特技能并带走专属作品？
+🌈 想要探索传统文化的奥秘？
+
+我们精心准备的文化体验活动，将带您走进传统文化的神奇世界！
+
+📅 活动时间：每周六日 10:00-12:00
+📍 活动地点：灵山镇文化中心
+
+✨ 活动亮点 ✨
+📌 专业指导：资深老师一对一指导
+📌 全程互动：沉浸式参与体验
+📌 作品带走：制作专属于您的独特作品
+📌 小班授课：每班限额20人，确保体验质量
+
+💰 特惠价格：¥98/人（原价¥128）
+👪 家庭套票：亲子同行每人减¥15
+
+🔥 报名电话：XXX-XXXX-XXXX
+🔥 微信预约：扫描下方二维码
+🔥 名额有限，先到先得！`;
+                }
+            }
+            
+            // AI生成亮点介绍
+            function generateHighlights(name, category) {
+                if (category === '手工艺' || name.includes('香囊')) {
+                    return `【活动亮点】
+
+1️⃣ 非遗传承：本活动由省级非物质文化遗产传承人亲自授课，传授正宗的传统香囊制作技艺。
+
+2️⃣ 优质材料：提供精选优质材料，包括多种真丝面料、天然香料和精美装饰物，确保作品品质。
+
+3️⃣ 个性定制：每位参与者可根据个人喜好选择不同的款式、颜色和香料配方，打造独一无二的香囊。
+
+4️⃣ 文化体验：不只是简单的手工制作，更深入了解香囊的历史文化背景、寓意象征和传统工艺。
+
+5️⃣ 实用价值：制作的香囊不仅具有观赏价值，还可用于衣物香熏、随身佩戴或馈赠亲友。
+
+6️⃣ 小班教学：每班限20人，确保每位参与者都能得到充分的指导和帮助。`;
+                } else {
+                    return `【活动亮点】
+
+1️⃣ 专业指导：活动由具有多年经验的专业老师全程指导，确保学习质量。
+
+2️⃣ 深度体验：不止于表面了解，深入体验传统文化的精髓和技艺。
+
+3️⃣ 互动参与：全程互动式教学，参与者亲身实践，加深理解和记忆。
+
+4️⃣ 个性化作品：每位参与者都能创作属于自己的独特作品，并带回家中。
+
+5️⃣ 文化传承：了解传统文化背后的历史故事和文化内涵，传承非物质文化遗产。
+
+6️⃣ 交流分享：与志同道合的朋友交流互动，分享创作经验和心得。`;
+                }
+            }
+            
+            // 更新当前时间
+            function updateTime() {
+                const now = new Date();
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                document.querySelector('.status-left').textContent = `${hours}:${minutes}`;
+            }
+            
+            updateTime();
+            setInterval(updateTime, 60000);
+        });
+    </script>
+</body>
+</html> 

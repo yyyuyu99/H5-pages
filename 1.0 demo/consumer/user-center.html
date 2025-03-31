@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>城乡文化直连平台 - 个人中心</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f7f7f7;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* iPhone 15 Pro Max 外壳 */
+        .device-container {
+            position: relative;
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 55px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        /* 顶部刘海 */
+        .notch {
+            position: absolute;
+            width: 180px;
+            height: 32px;
+            background: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 999;
+        }
+        
+        /* 屏幕 */
+        .screen {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 45px;
+            overflow: hidden;
+        }
+        
+        /* 状态栏 */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px 5px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #000;
+            z-index: 100;
+            position: relative;
+        }
+        
+        .status-left {
+            letter-spacing: 1px;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .battery-icon {
+            width: 25px;
+            height: 13px;
+            border: 1px solid currentColor;
+            border-radius: 3px;
+            padding: 2px;
+            position: relative;
+        }
+        
+        .battery-icon:after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 4px;
+            background: currentColor;
+            right: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .battery-level {
+            height: 100%;
+            width: 65%;
+            background: currentColor;
+            border-radius: 1px;
+        }
+        
+        /* 内容区域 */
+        .content {
+            position: absolute;
+            top: 48px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 70px;
+            background-color: #f5f5f5;
+        }
+        
+        /* 用户信息区域 */
+        .user-profile {
+            background: #8D6E63;
+            background-image: linear-gradient(135deg, #8D6E63, #A1887F);
+            padding: 20px 16px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            object-fit: cover;
+            margin-right: 15px;
+            background: #fff;
+        }
+        
+        .user-info {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .user-id {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        
+        .vip-badge {
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .edit-profile {
+            position: absolute;
+            right: 0;
+            top: 0;
+            font-size: 18px;
+            padding: 10px;
+            opacity: 0.8;
+        }
+        
+        .user-stats {
+            display: flex;
+            position: relative;
+            z-index: 2;
+            margin-top: 5px;
+        }
+        
+        .stat-item {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .profile-bg-pattern {
+            position: absolute;
+            right: -20px;
+            bottom: -20px;
+            width: 150px;
+            height: 150px;
+            opacity: 0.1;
+            z-index: 1;
+            background-image: url('https://images.pexels.com/photos/247597/pexels-photo-247597.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+            border-radius: 50%;
+        }
+        
+        /* 功能菜单 */
+        .menu-section {
+            margin: 15px 12px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .section-title {
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+        
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+        
+        .menu-item:active {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(141, 110, 99, 0.1);
+            border-radius: 6px;
+            color: #8D6E63;
+        }
+        
+        .menu-text {
+            flex: 1;
+            font-size: 15px;
+            color: #333;
+        }
+        
+        .menu-arrow {
+            color: #ccc;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        
+        .badge {
+            font-size: 12px;
+            background: #8D6E63;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+        
+        /* 订单列表 */
+        .order-cards {
+            display: flex;
+            padding: 15px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+            gap: 12px;
+            padding-bottom: 5px;
+        }
+        
+        .order-cards::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        
+        .order-card {
+            flex: 0 0 220px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .order-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+        
+        .order-content {
+            padding: 12px;
+        }
+        
+        .order-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .order-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        
+        .order-status {
+            font-size: 12px;
+            color: #8D6E63;
+        }
+        
+        /* 收藏列表 */
+        .favorite-items {
+            padding: 5px 15px;
+        }
+        
+        .favorite-item {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .favorite-item:last-child {
+            border-bottom: none;
+        }
+        
+        .favorite-image {
+            width: 80px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .favorite-content {
+            flex: 1;
+        }
+        
+        .favorite-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #333;
+        }
+        
+        .favorite-price {
+            font-size: 14px;
+            color: #8D6E63;
+            font-weight: 600;
+        }
+        
+        .favorite-meta {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        /* 左右滑动提示指示器 */
+        .scroll-indicator {
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        
+        .indicator-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #DDD;
+            margin: 0 2px;
+        }
+        
+        .indicator-dot.active {
+            background: #8D6E63;
+            width: 12px;
+            border-radius: 4px;
+        }
+        
+        /* 滑动提示箭头 */
+        .scroll-hint {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 5;
+            font-size: 12px;
+        }
+        
+        .scroll-hint.left {
+            left: 10px;
+        }
+        
+        .scroll-hint.right {
+            right: 10px;
+        }
+        
+        /* 签到功能 */
+        .signin-card {
+            background: linear-gradient(135deg, #8D6E63, #A1887F);
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            margin: 15px 15px 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .signin-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .signin-title .icon {
+            margin-right: 6px;
+            font-size: 18px;
+        }
+        
+        .signin-desc {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+        
+        .signin-days {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .day-item {
+            width: 36px;
+            height: 50px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 0;
+            position: relative;
+        }
+        
+        .day-item.active {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .day-item.done {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .day-item.done::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        
+        .day-num {
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+        
+        .day-reward {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.8);
+            white-space: nowrap;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .signin-button {
+            width: 100%;
+            height: 36px;
+            background: white;
+            color: #8D6E63;
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .signin-pattern {
+            position: absolute;
+            right: -10px;
+            bottom: -10px;
+            width: 100px;
+            height: 100px;
+            background-image: url('https://images.pexels.com/photos/1656663/pexels-photo-1656663.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-size: cover;
+            opacity: 0.1;
+            border-radius: 50%;
+        }
+        
+        /* 快捷操作菜单 */
+        .quick-actions {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 12px 15px;
+        }
+        
+        .quick-action {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .quick-action-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 23px;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            color: #8D6E63;
+        }
+        
+        .quick-action-text {
+            font-size: 12px;
+            color: #333;
+        }
+        
+        /* 底部导航栏 */
+        .tab-bar {
+            height: 50px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 5px;
+            z-index: 10;
+            border-bottom-left-radius: 45px;
+            border-bottom-right-radius: 45px;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 25%;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+        
+        .tab-icon {
+            font-size: 22px;
+            margin-bottom: 2px;
+            color: #999;
+        }
+        
+        .tab-item.active .tab-icon {
+            color: #8D6E63;
+        }
+        
+        .tab-text {
+            font-size: 10px;
+            color: #999;
+        }
+        
+        .tab-item.active .tab-text {
+            color: #8D6E63;
+        }
+        
+        /* 模拟图标 */
+        .icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: inherit;
+        }
+        
+        /* 订单卡片区域滚动容器样式和滑动指示器 */
+        .order-cards-container {
+            position: relative;
+            margin: 0 15px;
+        }
+        
+        .order-cards {
+            display: flex;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            gap: 12px;
+            padding: 15px 0 5px;
+        }
+        
+        .order-cards::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* 左右滑动箭头样式增强 */
+        .scroll-hint {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 5;
+            font-size: 14px;
+            color: #8D6E63;
+            cursor: pointer;
+        }
+        
+        .scroll-hint.left {
+            left: -8px;
+        }
+        
+        .scroll-hint.right {
+            right: -8px;
+        }
+        
+        /* 收藏区域滚动样式 */
+        .favorite-items-container {
+            position: relative;
+            margin: 0 5px;
+        }
+        
+        .favorite-items {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            padding: 10px;
+            gap: 15px;
+        }
+        
+        .favorite-items::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .favorite-item {
+            flex: 0 0 280px;
+            display: flex;
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <div class="notch"></div>
+        <div class="screen">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-left">12:30</div>
+                <div class="status-right">
+                    <span style="margin-right: 5px;">5G</span>
+                    <div class="battery-icon">
+                        <div class="battery-level"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 用户信息 -->
+                <div class="user-profile">
+                    <div class="edit-profile">⚙️</div>
+                    <div class="profile-header">
+                        <img src="https://images.pexels.com/photos/1382731/pexels-photo-1382731.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="avatar" alt="用户头像">
+                        <div class="user-info">
+                            <div class="user-name">山野逐茶人<span class="vip-badge">🏆会员</span></div>
+                            <div class="user-id">ID: 8739245</div>
+                        </div>
+                    </div>
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">8</div>
+                            <div>已参与</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">12</div>
+                            <div>收藏</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5</div>
+                            <div>足迹</div>
+                        </div>
+                    </div>
+                    <div class="profile-bg-pattern"></div>
+                </div>
+                
+                <!-- 快捷操作菜单 -->
+                <div class="quick-actions">
+                    <div class="quick-action" id="viewOrdersAction">
+                        <div class="quick-action-icon">🧾</div>
+                        <div class="quick-action-text">我的订单</div>
+                    </div>
+                    <div class="quick-action" id="viewCartAction">
+                        <div class="quick-action-icon">🛒</div>
+                        <div class="quick-action-text">购物车</div>
+                    </div>
+                    <div class="quick-action" id="viewFavoritesAction">
+                        <div class="quick-action-icon">❤️</div>
+                        <div class="quick-action-text">我的收藏</div>
+                    </div>
+                    <div class="quick-action" id="viewCouponsAction">
+                        <div class="quick-action-icon">🎟️</div>
+                        <div class="quick-action-text">优惠券</div>
+                    </div>
+                </div>
+                
+                <!-- 每日签到 -->
+                <div class="signin-card">
+                    <div class="signin-title">
+                        <span class="icon">🎁</span>每日签到
+                    </div>
+                    <div class="signin-desc">连续签到7天可获得精美茶艺礼盒</div>
+                    <div class="signin-days">
+                        <div class="day-item done">
+                            <div class="day-num">1</div>
+                            <div class="day-reward">5积分</div>
+                        </div>
+                        <div class="day-item done">
+                            <div class="day-num">2</div>
+                            <div class="day-reward">10积分</div>
+                        </div>
+                        <div class="day-item active">
+                            <div class="day-num">3</div>
+                            <div class="day-reward">15积分</div>
+                        </div>
+                        <div class="day-item">
+                            <div class="day-num">4</div>
+                            <div class="day-reward">20积分</div>
+                        </div>
+                        <div class="day-item">
+                            <div class="day-num">5</div>
+                            <div class="day-reward">25积分</div>
+                        </div>
+                        <div class="day-item">
+                            <div class="day-num">6</div>
+                            <div class="day-reward">30积分</div>
+                        </div>
+                        <div class="day-item">
+                            <div class="day-num">7</div>
+                            <div class="day-reward">礼盒</div>
+                        </div>
+                    </div>
+                    <div class="signin-button" id="signinButton">立即签到</div>
+                    <div class="signin-pattern"></div>
+                </div>
+                
+                <!-- 我的订单 -->
+                <div class="menu-section">
+                    <div class="section-title">我的订单</div>
+                    <div class="order-cards-container">
+                        <!-- 左滑动提示箭头 -->
+                        <div class="scroll-hint left" id="orderLeftHint" style="display: none;">◀</div>
+                        
+                        <div class="order-cards" id="orderCards">
+                            <!-- 订单1 -->
+                            <div class="order-card">
+                                <img src="https://www.qdndz.gov.cn/xwzx/bmdt/202404/W020240401334282873412.jpg" class="order-image" alt="云南古寨茶道之旅">
+                                <div class="order-content">
+                                    <div class="order-title">云南古寨茶道之旅</div>
+                                    <div class="order-meta">
+                                        <div>订单号: 265498</div>
+                                        <div>09-15</div>
+                                    </div>
+                                    <div class="order-status">已完成</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 订单2 -->
+                            <div class="order-card">
+                                <img src="https://q1.itc.cn/images01/20241118/3cf34f58df6c4ae5bc7a03b1c4816ad6.png" class="order-image" alt="江南水乡工艺之旅">
+                                <div class="order-content">
+                                    <div class="order-title">江南水乡工艺之旅</div>
+                                    <div class="order-meta">
+                                        <div>订单号: 276542</div>
+                                        <div>11-20</div>
+                                    </div>
+                                    <div class="order-status">待出行</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 订单3 -->
+                            <div class="order-card">
+                                <img src="https://upload.bjsyqw.com/2024/0409/1712645205463.jpg" class="order-image" alt="黔东南非遗探索">
+                                <div class="order-content">
+                                    <div class="order-title">黔东南非遗探索之旅</div>
+                                    <div class="order-meta">
+                                        <div>订单号: 289753</div>
+                                        <div>12-05</div>
+                                    </div>
+                                    <div class="order-status">已预订</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 右滑动提示箭头 -->
+                        <div class="scroll-hint right" id="orderRightHint">▶</div>
+                        
+                        <!-- 滑动指示器 -->
+                        <div class="scroll-indicator">
+                            <div class="indicator-dot active"></div>
+                            <div class="indicator-dot"></div>
+                            <div class="indicator-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 我的收藏 -->
+                <div class="menu-section">
+                    <div class="section-title">我的收藏</div>
+                    <div class="favorite-items-container">
+                        <!-- 左滑动提示箭头 -->
+                        <div class="scroll-hint left" id="favoriteLeftHint" style="display: none;">◀</div>
+                        
+                        <div class="favorite-items" id="favoriteItems">
+                            <!-- 收藏项目1 -->
+                            <div class="favorite-item">
+                                <img src="https://bpic.588ku.com/video_library/cover/24/05/17/001a6ee93fda6e4e9731a851d577d102_snapshot_t0.jpg" class="favorite-image" alt="古法茶艺体验课程">
+                                <div class="favorite-content">
+                                    <div class="favorite-title">古法茶艺体验课程</div>
+                                    <div class="favorite-price">¥268/人</div>
+                                    <div class="favorite-meta">云南普洱 · 4.9分</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 收藏项目2 -->
+                            <div class="favorite-item">
+                                <img src="https://file3.renrendoc.com/fileroot_temp3/2021-12/23/ea01dce5-8781-4037-92d4-aa172590fd70/ea01dce5-8781-4037-92d4-aa172590fd701.gif" class="favorite-image" alt="景德镇传统陶艺制作">
+                                <div class="favorite-content">
+                                    <div class="favorite-title">景德镇传统陶艺制作</div>
+                                    <div class="favorite-price">¥298/人</div>
+                                    <div class="favorite-meta">江西景德镇 · 4.8分</div>
+                                </div>
+                            </div>
+                            
+                            <!-- 收藏项目3 -->
+                            <div class="favorite-item">
+                                <img src="https://b0.bdstatic.com/90f79fabd0deb98704ed1231430a13c2.jpg" class="favorite-image" alt="苗族传统刺绣课程">
+                                <div class="favorite-content">
+                                    <div class="favorite-title">苗族传统刺绣课程</div>
+                                    <div class="favorite-price">¥368/人</div>
+                                    <div class="favorite-meta">贵州黔东南 · 4.9分</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 右滑动提示箭头 -->
+                        <div class="scroll-hint right" id="favoriteRightHint">▶</div>
+                        
+                        <!-- 滑动指示器 -->
+                        <div class="scroll-indicator">
+                            <div class="indicator-dot active"></div>
+                            <div class="indicator-dot"></div>
+                            <div class="indicator-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 功能菜单 -->
+                <div class="menu-section">
+                    <div class="menu-item">
+                        <div class="menu-icon">🎁</div>
+                        <div class="menu-text">优惠券</div>
+                        <div class="badge">3张</div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon">💌</div>
+                        <div class="menu-text">我的消息</div>
+                        <div class="badge">5条</div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon">🔔</div>
+                        <div class="menu-text">系统通知</div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                </div>
+                
+                <!-- 设置项 -->
+                <div class="menu-section">
+                    <div class="menu-item">
+                        <div class="menu-icon">⚙️</div>
+                        <div class="menu-text">账号设置</div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon">💬</div>
+                        <div class="menu-text">联系客服</div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon">❓</div>
+                        <div class="menu-text">帮助中心</div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="menu-icon">🔒</div>
+                        <div class="menu-text">隐私条款</div>
+                        <div class="menu-arrow">›</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="tab-bar">
+                <div class="tab-item">
+                    <div class="icon tab-icon">🏡</div>
+                    <div class="tab-text">首页</div>
+                </div>
+                <div class="tab-item">
+                    <div class="icon tab-icon">🧶</div>
+                    <div class="tab-text">体验</div>
+                </div>
+                <div class="tab-item">
+                    <div class="icon tab-icon">🗺️</div>
+                    <div class="tab-text">路线</div>
+                </div>
+                <div class="tab-item active">
+                    <div class="icon tab-icon">👤</div>
+                    <div class="tab-text">我的</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 底部导航切换
+        const tabItems = document.querySelectorAll('.tab-item');
+        tabItems.forEach(item => {
+            item.addEventListener('click', function() {
+                tabItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 页面切换逻辑
+                const tabText = this.querySelector('.tab-text').textContent;
+                switch(tabText) {
+                    case '首页':
+                        window.location.href = 'index.html';
+                        break;
+                    case '体验':
+                        window.location.href = 'cultural-experience.html';
+                        break;
+                    case '路线':
+                        window.location.href = 'custom-route.html';
+                        break;
+                    case '我的':
+                        // 已经在当前页面
+                        break;
+                }
+            });
+        });
+        
+        // 菜单项点击
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const menuText = this.querySelector('.menu-text').textContent;
+                console.log('点击菜单:', menuText);
+                // 这里可以添加点击后的跳转逻辑
+                
+                if (menuText === '联系客服') {
+                    alert('客服电话: 400-888-6666\n工作时间: 9:00-18:00');
+                } else if (menuText === '账号设置') {
+                    // 账号设置页面
+                    console.log('跳转到账号设置页面');
+                } else {
+                    alert(menuText + ' 功能即将上线，敬请期待！');
+                }
+            });
+        });
+        
+        // 订单卡片点击
+        const orderCards = document.querySelectorAll('.order-card');
+        orderCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const title = this.querySelector('.order-title').textContent;
+                console.log('查看订单详情:', title);
+                alert('订单详情页面即将上线，敬请期待！');
+            });
+        });
+        
+        // 收藏项目点击
+        const favoriteItems = document.querySelectorAll('.favorite-item');
+        favoriteItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const title = this.querySelector('.favorite-title').textContent;
+                console.log('查看收藏项目:', title);
+                alert('项目详情页面即将上线，敬请期待！');
+            });
+        });
+        
+        // 编辑用户资料
+        document.querySelector('.edit-profile').addEventListener('click', function() {
+            alert('个人资料编辑页面即将上线，敬请期待！');
+        });
+        
+        // 签到功能
+        const signinButton = document.getElementById('signinButton');
+        signinButton.addEventListener('click', function() {
+            const activeDay = document.querySelector('.day-item.active');
+            if (activeDay) {
+                activeDay.classList.remove('active');
+                activeDay.classList.add('done');
+                
+                // 如果有下一天，则将下一天设为active
+                const nextDay = activeDay.nextElementSibling;
+                if (nextDay) {
+                    nextDay.classList.add('active');
+                }
+                
+                // 获取当前签到天数的积分
+                const points = activeDay.querySelector('.day-reward').textContent;
+                
+                // 显示签到成功提示
+                alert('签到成功！获得' + points);
+                
+                // 更改按钮文字
+                this.textContent = '明日再来';
+                this.style.background = 'rgba(255, 255, 255, 0.7)';
+            }
+        });
+        
+        // 横向滚动事件监听 - 订单区域
+        const orderCardsElem = document.getElementById('orderCards');
+        const orderLeftHint = document.getElementById('orderLeftHint');
+        const orderRightHint = document.getElementById('orderRightHint');
+        
+        // 收藏区域滚动处理
+        const favoriteItemsElem = document.getElementById('favoriteItems');
+        const favoriteLeftHint = document.getElementById('favoriteLeftHint');
+        const favoriteRightHint = document.getElementById('favoriteRightHint');
+        
+        // 通用滚动处理函数
+        function handleHorizontalScroll(scrollElement, leftHint, rightHint, indicatorIndex) {
+            // 根据滚动位置显示或隐藏左右提示箭头
+            scrollElement.addEventListener('scroll', function() {
+                // 检查是否可以向左滚动（滚动位置大于0）
+                if (this.scrollLeft > 20) {
+                    leftHint.style.display = 'flex';
+                } else {
+                    leftHint.style.display = 'none';
+                }
+                
+                // 检查是否可以向右滚动（未到达最右端）
+                if (this.scrollLeft + this.clientWidth >= this.scrollWidth - 20) {
+                    rightHint.style.display = 'none';
+                } else {
+                    rightHint.style.display = 'flex';
+                }
+                
+                // 更新指示器点
+                updateIndicatorDots(this, indicatorIndex);
+            });
+            
+            // 左箭头点击事件
+            leftHint.addEventListener('click', function() {
+                scrollElement.scrollBy({
+                    left: -200,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // 右箭头点击事件
+            rightHint.addEventListener('click', function() {
+                scrollElement.scrollBy({
+                    left: 200,
+                    behavior: 'smooth'
+                });
+            });
+        }
+        
+        // 更新指示器点
+        function updateIndicatorDots(scrollElement, sectionIndex) {
+            const maxScroll = scrollElement.scrollWidth - scrollElement.clientWidth;
+            if (maxScroll <= 10) return; // 如果没有可滚动空间，不处理
+            
+            const scrollPercentage = scrollElement.scrollLeft / maxScroll;
+            const dotsContainer = document.querySelectorAll('.scroll-indicator')[sectionIndex];
+            const dots = dotsContainer.querySelectorAll('.indicator-dot');
+            
+            // 重置所有点
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // 根据滚动百分比设置活动点
+            if (scrollPercentage < 0.33) {
+                dots[0].classList.add('active');
+            } else if (scrollPercentage < 0.66) {
+                dots[1].classList.add('active');
+            } else {
+                dots[2].classList.add('active');
+            }
+        }
+        
+        // 初始化横向滚动
+        function initHorizontalScrolls() {
+            // 初始化订单区域滚动
+            handleHorizontalScroll(orderCardsElem, orderLeftHint, orderRightHint, 0);
+            
+            // 初始化收藏区域滚动
+            handleHorizontalScroll(favoriteItemsElem, favoriteLeftHint, favoriteRightHint, 1);
+            
+            // 初始触发一次滚动事件来设置箭头状态
+            orderCardsElem.dispatchEvent(new Event('scroll'));
+            favoriteItemsElem.dispatchEvent(new Event('scroll'));
+        }
+        
+        // 快捷操作按钮事件
+        document.getElementById('viewOrdersAction').addEventListener('click', function() {
+            // 滚动到订单区域
+            document.querySelector('.menu-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        document.getElementById('viewCartAction').addEventListener('click', function() {
+            alert('购物车功能即将上线，敬请期待！');
+        });
+        
+        document.getElementById('viewFavoritesAction').addEventListener('click', function() {
+            // 滚动到收藏区域
+            document.querySelectorAll('.menu-section')[1].scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        document.getElementById('viewCouponsAction').addEventListener('click', function() {
+            alert('您当前有3张优惠券可用，详情请在优惠券页面查看');
+        });
+        
+        // 页面加载完成后初始化
+        window.addEventListener('load', function() {
+            initHorizontalScrolls();
+        });
+    </script>
+</body>
+</html> 

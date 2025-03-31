@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>城乡文化直连平台 - 首页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f7f7f7;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* iPhone 15 Pro Max 外壳 */
+        .device-container {
+            position: relative;
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 55px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        /* 顶部刘海 */
+        .notch {
+            position: absolute;
+            width: 180px;
+            height: 32px;
+            background: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 999;
+        }
+        
+        /* 底部指示条 */
+        .home-indicator {
+            position: absolute;
+            width: 135px;
+            height: 5px;
+            background: #fff;
+            border-radius: 3px;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        /* 侧边按钮 */
+        .power-button {
+            position: absolute;
+            width: 3px;
+            height: 28px;
+            background: #222;
+            top: 130px;
+            right: -3px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        
+        .volume-up {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 125px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .volume-down {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 200px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        /* 屏幕 */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #F9F7F4;
+            border-radius: 45px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            color: #000;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .battery-icon {
+            width: 25px;
+            height: 12px;
+            border: 1px solid #000;
+            border-radius: 3px;
+            padding: 1px;
+            margin-left: 5px;
+            position: relative;
+        }
+        
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 6px;
+            background: #000;
+            right: -4px;
+            top: 3px;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .battery-level {
+            height: 100%;
+            width: 60%;
+            background: #000;
+            border-radius: 1px;
+        }
+        
+        /* 内容区域 */
+        .content {
+            height: calc(100% - 44px - 50px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background-image: url('https://images.unsplash.com/photo-1595411425732-e49e26c310da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80&brightness=-95&saturation=-30&alpha=0.08');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        /* 搜索栏 */
+        .search-bar-container {
+            padding: 10px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(249, 247, 244, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+        
+        .search-bar {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .search-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            color: #999;
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: #666;
+            background: transparent;
+        }
+        
+        /* 地域分类导航 */
+        .region-nav {
+            padding: 5px 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            background: rgba(249, 247, 244, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            margin-bottom: 5px;
+        }
+        
+        .region-item {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-right: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            font-size: 13px;
+            color: #666;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .region-item.active {
+            background: #8D6E63;
+            color: #fff;
+            border: none;
+        }
+        
+        /* 轮播区 */
+        .swiper {
+            width: calc(100% - 32px);
+            height: 160px;
+            position: relative;
+            margin: 0 16px 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .swiper-wrapper {
+            display: flex;
+            width: 400%;
+            height: 100%;
+            transition: transform 0.5s ease;
+        }
+        
+        .swiper-slide {
+            width: 25%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        
+        .swiper-slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: white;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+        
+        .swiper-slide-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .swiper-slide-subtitle {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .swiper-pagination {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            display: flex;
+            gap: 6px;
+        }
+        
+        .swiper-pagination-bullet {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .swiper-pagination-bullet-active {
+            width: 18px;
+            border-radius: 3px;
+            background-color: white;
+        }
+        
+        .swiper-button-prev,
+        .swiper-button-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .swiper:hover .swiper-button-prev,
+        .swiper:hover .swiper-button-next {
+            opacity: 1;
+        }
+        
+        .swiper-button-prev {
+            left: 10px;
+        }
+        
+        .swiper-button-next {
+            right: 10px;
+        }
+        
+        /* 功能区 */
+        .feature-grid {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            margin: 0 16px 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .feature-item {
+            width: 25%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .feature-item:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+        
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(141, 110, 99, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #8D6E63;
+            font-size: 22px;
+            box-shadow: 0 2px 8px rgba(141, 110, 99, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .feature-title {
+            font-size: 12px;
+            color: #333;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 内容区标题 */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 16px 10px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            position: relative;
+            padding-left: 12px;
+            letter-spacing: 1px;
+        }
+        
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 4px;
+            height: 18px;
+            background: #8D6E63;
+            border-radius: 2px;
+        }
+        
+        .section-more {
+            font-size: 12px;
+            color: #8D6E63;
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            padding: 5px 10px;
+        }
+        
+        .section-more::after {
+            content: '❯';
+            font-size: 10px;
+            margin-left: 2px;
+        }
+        
+        /* 文化体验专区 */
+        .experience-grid {
+            padding: 0 16px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+        .experience-card {
+            width: calc(50% - 6px);
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .experience-img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+        
+        .experience-info {
+            padding: 12px;
+        }
+        
+        .experience-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        
+        .experience-desc {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 36px;
+            line-height: 1.5;
+        }
+        
+        .experience-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .experience-location {
+            font-size: 11px;
+            color: #999;
+            display: flex;
+            align-items: center;
+        }
+        
+        .location-icon {
+            font-size: 12px;
+            margin-right: 2px;
+        }
+        
+        .experience-price {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8D6E63;
+        }
+        
+        /* 特产专区 */
+        .product-scroll {
+            padding: 0 16px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .product-card {
+            display: inline-block;
+            width: 140px;
+            margin-right: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 10px 12px;
+        }
+        
+        .product-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .product-desc {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .product-price {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8D6E63;
+        }
+        
+        /* 故事专栏 */
+        .story-container {
+            padding: 0 16px 20px;
+        }
+        
+        .story-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .story-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .story-content {
+            padding: 16px;
+        }
+        
+        .story-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        
+        .story-excerpt {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 14px;
+            line-height: 1.7;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .story-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .story-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 6px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .author-name {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .story-time {
+            font-size: 11px;
+            color: #999;
+        }
+        
+        /* 底部导航栏 */
+        .tab-bar {
+            height: 50px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 10px;
+            z-index: 10;
+            width: 100%;
+            border-bottom-left-radius: 45px;
+            border-bottom-right-radius: 45px;
+        }
+        
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 25%;
+            position: relative;
+            z-index: 1;
+            padding: 5px 0;
+            max-width: 70px;
+            margin: 0 auto;
+        }
+        
+        .tab-item:after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+        
+        .tab-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+            color: #999;
+        }
+        
+        .tab-item.active .tab-icon {
+            color: #8D6E63;
+        }
+        
+        .tab-text {
+            font-size: 10px;
+            color: #999;
+        }
+        
+        .tab-item.active .tab-text {
+            color: #8D6E63;
+        }
+
+        /* 模拟图标 */
+        .icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: inherit;
+        }
+        
+        /* 页面装饰元素 */
+        .decorative-line {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(141, 110, 99, 0.2), transparent);
+            margin: 5px 30px 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <div class="notch"></div>
+        <div class="home-indicator"></div>
+        <div class="power-button"></div>
+        <div class="volume-up"></div>
+        <div class="volume-down"></div>
+        
+        <div class="screen">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-left">12:30</div>
+                <div class="status-right">
+                    <span style="margin-right: 5px;">5G</span>
+                    <div class="battery-icon">
+                        <div class="battery-level"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 搜索栏 -->
+                <div class="search-bar-container">
+                    <div class="search-bar">
+                        <div class="icon search-icon">🔍</div>
+                        <input type="text" class="search-input" placeholder="搜索特产、文化体验、地点...">
+                    </div>
+                </div>
+                
+                <!-- 地域分类导航 -->
+                <div class="region-nav">
+                    <div class="region-item active">推荐</div>
+                    <div class="region-item">云南</div>
+                    <div class="region-item">贵州</div>
+                    <div class="region-item">四川</div>
+                    <div class="region-item">广西</div>
+                    <div class="region-item">浙江</div>
+                    <div class="region-item">江西</div>
+                    <div class="region-item">福建</div>
+                    <div class="region-item">湖南</div>
+                </div>
+                
+                <!-- 轮播区 -->
+                <div class="swiper">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper" id="swiperWrapper">
+                            <div class="swiper-slide">
+                                <img src="https://bpic.588ku.com/back_list_pic/21/05/26/7a1d785d57d0f334c3a1566870ba44be.jpg%21/fw/822.85714285714/quality/90/unsharp/true/compress/true" alt="云南普洱非遗茶道文化之旅">
+                                <div class="swiper-slide-content">
+                                    <div class="swiper-slide-title">云南普洱非遗茶道文化之旅</div>
+                                    <div class="swiper-slide-subtitle">体验古法制茶，领略茶道精髓</div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <img src="https://pic.616pic.com/bg_w1180/00/01/27/Fs0FKpH1tz.jpg" alt="贵州黔东南苗族刺绣体验">
+                                <div class="swiper-slide-content">
+                                    <div class="swiper-slide-title">贵州黔东南苗族刺绣体验</div>
+                                    <div class="swiper-slide-subtitle">寻访千年传承，探索非遗文化</div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <img src="https://tse4-mm.cn.bing.net/th/id/OIP-C.MwVYcJ1DeHsFPe0xCnNaxgHaDt?rs=1&pid=ImgDetMain" alt="景德镇陶瓷工艺探索">
+                                <div class="swiper-slide-content">
+                                    <div class="swiper-slide-title">景德镇陶瓷工艺探索</div>
+                                    <div class="swiper-slide-subtitle">千年瓷都，匠心传承</div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <img src="https://tse2-mm.cn.bing.net/th/id/OIP-C.iALE1DKWwlqWcHkXoahGMwHaDI?rs=1&pid=ImgDetMain" alt="西北皮影戏文化探索">
+                                <div class="swiper-slide-content">
+                                    <div class="swiper-slide-title">西北皮影戏文化探索</div>
+                                    <div class="swiper-slide-subtitle">光影艺术，活态传承</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-button-prev">❮</div>
+                    <div class="swiper-button-next">❯</div>
+                    <div class="swiper-pagination" id="swiperPagination">
+                        <div class="swiper-pagination-bullet swiper-pagination-bullet-active"></div>
+                        <div class="swiper-pagination-bullet"></div>
+                        <div class="swiper-pagination-bullet"></div>
+                        <div class="swiper-pagination-bullet"></div>
+                    </div>
+                </div>
+                
+                <!-- 功能区 -->
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🧶</div>
+                        <div class="feature-title">文化体验</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🍊</div>
+                        <div class="feature-title">特产好礼</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🗺️</div>
+                        <div class="feature-title">定制路线</div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📖</div>
+                        <div class="feature-title">文化故事</div>
+                    </div>
+                </div>
+                
+                <div class="decorative-line"></div>
+                
+                <!-- 文化体验专区 -->
+                <div class="section-header">
+                    <div class="section-title">文化体验</div>
+                    <div class="section-more">更多</div>
+                </div>
+                
+                <div class="experience-grid">
+                    <div class="experience-card">
+                        <img src="https://bpic.588ku.com/video_library/cover/24/05/17/001a6ee93fda6e4e9731a851d577d102_snapshot_t0.jpg" class="experience-img" alt="茶艺体验">
+                        <div class="experience-info">
+                            <div class="experience-title">传统茶艺体验</div>
+                            <div class="experience-desc">感受千年茶道文化，品味生活之美</div>
+                            <div class="experience-meta">
+                                <div class="experience-location">
+                                    <span class="icon location-icon">📍</span>云南普洱
+                                </div>
+                                <div class="experience-price">¥268/人</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="experience-card">
+                        <img src="https://file3.renrendoc.com/fileroot_temp3/2021-12/23/ea01dce5-8781-4037-92d4-aa172590fd70/ea01dce5-8781-4037-92d4-aa172590fd701.gif" class="experience-img" alt="陶艺制作">
+                        <div class="experience-info">
+                            <div class="experience-title">景德镇陶艺制作</div>
+                            <div class="experience-desc">千年瓷都，亲手制作专属的陶瓷艺术品</div>
+                            <div class="experience-meta">
+                                <div class="experience-location">
+                                    <span class="icon location-icon">📍</span>江西景德镇
+                                </div>
+                                <div class="experience-price">¥198/人</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="experience-card">
+                        <img src="https://clubimg.club.vmall.com/dl/huafans/pic/2019/10/23/e7282bbfa32f7ef8be72598432a95d7f_1571789493095.jpeg" class="experience-img" alt="纸伞制作">
+                        <div class="experience-info">
+                            <div class="experience-title">油纸伞手工制作</div>
+                            <div class="experience-desc">传承百年手艺，制作美丽油纸伞</div>
+                            <div class="experience-meta">
+                                <div class="experience-location">
+                                    <span class="icon location-icon">📍</span>浙江杭州
+                                </div>
+                                <div class="experience-price">¥228/人</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="experience-card">
+                        <img src="https://b0.bdstatic.com/90f79fabd0deb98704ed1231430a13c2.jpg" class="experience-img" alt="苗绣体验">
+                        <div class="experience-info">
+                            <div class="experience-title">苗族刺绣体验</div>
+                            <div class="experience-desc">非遗文化传承，感受针线间的匠心</div>
+                            <div class="experience-meta">
+                                <div class="experience-location">
+                                    <span class="icon location-icon">📍</span>贵州黔东南
+                                </div>
+                                <div class="experience-price">¥188/人</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="decorative-line"></div>
+                
+                <!-- 特产专区 -->
+                <div class="section-header">
+                    <div class="section-title">特产好礼</div>
+                    <div class="section-more">更多</div>
+                </div>
+                
+                <div class="product-scroll">
+                    <div class="product-card">
+                        <img src="https://copyright.bdstatic.com/vcg/creative/44c0b84eacc214251fe8839ec75c7824.jpg@h_1280" class="product-img" alt="普洱茶">
+                        <div class="product-info">
+                            <div class="product-name">云南普洱茶</div>
+                            <div class="product-desc">传统工艺，百年老树</div>
+                            <div class="product-price">¥128</div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1471943311424-646960669fbc?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" class="product-img" alt="蜂蜜">
+                        <div class="product-info">
+                            <div class="product-name">野生土蜂蜜</div>
+                            <div class="product-desc">深山采集，纯天然</div>
+                            <div class="product-price">¥98</div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <img src="https://pic.ulecdn.com/pic/user_800206678/product/prd20240520/90924dc788ef4527_p800x800.jpeg" class="product-img" alt="茶油">
+                        <div class="product-info">
+                            <div class="product-name">山茶油</div>
+                            <div class="product-desc">传统压榨，健康食用</div>
+                            <div class="product-price">¥168</div>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <img src="https://t13.baidu.com/it/u=14182234017176097206,10376354432253762441&fm=3008&app=3011&f=JPEG" class="product-img" alt="竹编">
+                        <div class="product-info">
+                            <div class="product-name">传统竹编</div>
+                            <div class="product-desc">匠人手工，精致工艺</div>
+                            <div class="product-price">¥159</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="decorative-line"></div>
+                
+                <!-- 故事专栏 -->
+                <div class="section-header">
+                    <div class="section-title">文化故事</div>
+                    <div class="section-more">更多</div>
+                </div>
+                
+                <div class="story-container">
+                    <div class="story-card">
+                        <img src="https://p3.itc.cn/q_70/images03/20211019/112775ea5e7641c99d2bfe5e5d3bd912.jpeg" class="story-img" alt="中国茶道">
+                        <div class="story-content">
+                            <div class="story-title">茶与禅：一片树叶的千年传奇</div>
+                            <div class="story-excerpt">茶，不仅是一种饮品，更是中国文化的重要载体。从陆羽《茶经》到宋代点茶，再到明清的功夫茶，一片小小的树叶，承载了中国人对生活的理解与追求...</div>
+                            <div class="story-meta">
+                                <div class="story-author">
+                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" class="author-avatar" alt="作者">
+                                    <div class="author-name">茶道传承人 · 林清风</div>
+                                </div>
+                                <div class="story-time">2天前</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="story-card">
+                        <img src="https://t13.baidu.com/it/u=14182234017176097206,10376354432253762441&fm=3008&app=3011&f=JPEG" class="story-img" alt="竹编工艺">
+                        <div class="story-content">
+                            <div class="story-title">竹魂：指尖上的非遗艺术</div>
+                            <div class="story-excerpt">在四川眉山，有一群默默守护着千年竹编技艺的匠人。他们的手指在翠绿的竹条间穿梭，编织出精美绝伦的器物，也编织着中国手工艺的未来...</div>
+                            <div class="story-meta">
+                                <div class="story-author">
+                                    <img src="https://images.unsplash.com/photo-1556474835-b0f3ac40d4d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" class="author-avatar" alt="作者">
+                                    <div class="author-name">非遗记录者 · 张明</div>
+                                </div>
+                                <div class="story-time">5天前</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="tab-bar">
+                <div class="tab-item active">
+                    <div class="icon tab-icon">🏡</div>
+                    <div class="tab-text">首页</div>
+                </div>
+                <div class="tab-item">
+                    <div class="icon tab-icon">🧶</div>
+                    <div class="tab-text">体验</div>
+                </div>
+                <div class="tab-item">
+                    <div class="icon tab-icon">🗺️</div>
+                    <div class="tab-text">路线</div>
+                </div>
+                <div class="tab-item">
+                    <div class="icon tab-icon">👤</div>
+                    <div class="tab-text">我的</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 在现有脚本之前添加检查frame参数的代码
+        window.addEventListener('DOMContentLoaded', function() {
+            // 获取URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const showFrame = urlParams.get('frame') !== 'false';
+            
+            // 如果frame=false，隐藏设备容器并直接显示内容
+            if (!showFrame) {
+                const deviceContainer = document.querySelector('.device-container');
+                const screenElement = document.querySelector('.screen');
+                
+                if (deviceContainer && screenElement) {
+                    // 提取screen元素
+                    const screenContent = screenElement.innerHTML;
+                    
+                    // 替换设备容器内容为screen内容
+                    deviceContainer.innerHTML = screenContent;
+                    
+                    // 修改设备容器样式
+                    deviceContainer.style.width = '100%';
+                    deviceContainer.style.height = 'auto';
+                    deviceContainer.style.margin = '0';
+                    deviceContainer.style.borderRadius = '0';
+                    deviceContainer.style.boxShadow = 'none';
+                    deviceContainer.style.padding = '0';
+                    deviceContainer.style.background = 'transparent';
+                }
+            }
+        });
+        
+        // 轮播图逻辑
+        let swiperWrapper = document.getElementById('swiperWrapper');
+        let slides = document.querySelectorAll('.swiper-slide');
+        let pagination = document.querySelectorAll('.swiper-pagination-bullet');
+        let prevButton = document.querySelector('.swiper-button-prev');
+        let nextButton = document.querySelector('.swiper-button-next');
+        let currentIndex = 0;
+        let startX = 0;
+        let isDragging = false;
+        let autoplayInterval;
+        
+        function updateSlide(index) {
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+            
+            currentIndex = index;
+            swiperWrapper.style.transform = `translateX(-${currentIndex * 25}%)`;
+            
+            // 更新分页指示器
+            pagination.forEach((bullet, i) => {
+                if (i === currentIndex) {
+                    bullet.classList.add('swiper-pagination-bullet-active');
+                } else {
+                    bullet.classList.remove('swiper-pagination-bullet-active');
+                }
+            });
+        }
+        
+        // 初始化分页点击事件
+        pagination.forEach((bullet, index) => {
+            bullet.addEventListener('click', () => {
+                updateSlide(index);
+                resetAutoplay();
+            });
+        });
+        
+        // 设置前进后退按钮事件
+        prevButton.addEventListener('click', () => {
+            updateSlide(currentIndex - 1);
+            resetAutoplay();
+        });
+        
+        nextButton.addEventListener('click', () => {
+            updateSlide(currentIndex + 1);
+            resetAutoplay();
+        });
+        
+        // 触摸事件处理
+        swiperWrapper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            isDragging = true;
+            clearInterval(autoplayInterval);
+        });
+        
+        swiperWrapper.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            
+            const currentX = e.touches[0].clientX;
+            const diff = currentX - startX;
+            const slideWidth = slides[0].offsetWidth;
+            
+            // 在拖动过程中实时移动轮播图
+            if (Math.abs(diff) < slideWidth) {
+                swiperWrapper.style.transform = `translateX(calc(-${currentIndex * 25}% + ${diff}px))`;
+            }
+        });
+        
+        swiperWrapper.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            const diff = e.changedTouches[0].clientX - startX;
+            const threshold = slides[0].offsetWidth * 0.2;
+            
+            if (diff < -threshold) {
+                // 向左滑动，下一张
+                updateSlide(currentIndex + 1);
+            } else if (diff > threshold) {
+                // 向右滑动，上一张
+                updateSlide(currentIndex - 1);
+            } else {
+                // 滑动距离不够，回到当前幻灯片
+                updateSlide(currentIndex);
+            }
+            
+            resetAutoplay();
+        });
+        
+        // 鼠标拖动事件
+        swiperWrapper.addEventListener('mousedown', (e) => {
+            startX = e.clientX;
+            isDragging = true;
+            clearInterval(autoplayInterval);
+            e.preventDefault();
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const currentX = e.clientX;
+            const diff = currentX - startX;
+            const slideWidth = slides[0].offsetWidth;
+            
+            if (Math.abs(diff) < slideWidth) {
+                swiperWrapper.style.transform = `translateX(calc(-${currentIndex * 25}% + ${diff}px))`;
+            }
+        });
+        
+        document.addEventListener('mouseup', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            const diff = e.clientX - startX;
+            const threshold = slides[0].offsetWidth * 0.2;
+            
+            if (diff < -threshold) {
+                updateSlide(currentIndex + 1);
+            } else if (diff > threshold) {
+                updateSlide(currentIndex - 1);
+            } else {
+                updateSlide(currentIndex);
+            }
+            
+            resetAutoplay();
+        });
+        
+        // 重置自动播放
+        function resetAutoplay() {
+            clearInterval(autoplayInterval);
+            startAutoplay();
+        }
+        
+        // 开始自动播放
+        function startAutoplay() {
+            autoplayInterval = setInterval(() => {
+                updateSlide(currentIndex + 1);
+            }, 3000);
+        }
+        
+        // 页面加载时开始自动播放
+        startAutoplay();
+        
+        // 为地域导航项添加点击事件
+        const regionItems = document.querySelectorAll('.region-item');
+        regionItems.forEach(item => {
+            item.addEventListener('click', function() {
+                regionItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 添加内容切换效果
+                const regionName = this.textContent;
+                console.log('选择地区:', regionName);
+                
+                // 这里可以添加根据地区筛选内容的逻辑
+                const allCards = document.querySelectorAll('.experience-card, .product-card');
+                
+                // 模拟内容过滤动画
+                allCards.forEach(card => {
+                    card.style.opacity = '0.5';
+                    card.style.transform = 'scale(0.98)';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                    }, 300);
+                });
+            });
+        });
+        
+        // 为底部导航添加点击事件
+        const tabItems = document.querySelectorAll('.tab-item');
+        tabItems.forEach(item => {
+            item.addEventListener('click', function() {
+                tabItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 页面跳转逻辑
+                const tabText = this.querySelector('.tab-text').textContent;
+                switch(tabText) {
+                    case '首页':
+                        // 已经在首页
+                        break;
+                    case '体验':
+                        window.location.href = 'cultural-experience.html';
+                        break;
+                    case '路线':
+                        window.location.href = 'custom-route.html';
+                        break;
+                    case '我的':
+                        window.location.href = 'user-center.html';
+                        break;
+                }
+            });
+        });
+        
+        // 添加功能区点击事件
+        const featureItems = document.querySelectorAll('.feature-item');
+        featureItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const featureTitle = this.querySelector('.feature-title').textContent;
+                console.log('功能项被点击:', featureTitle);
+                
+                // 添加功能点击动画
+                const iconElem = this.querySelector('.feature-icon');
+                iconElem.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    iconElem.style.transform = 'scale(1)';
+                }, 150);
+                
+                // 功能跳转逻辑
+                switch(featureTitle) {
+                    case '文化体验':
+                        window.location.href = 'cultural-experience.html';
+                        break;
+                    case '特产好礼':
+                        window.location.href = 'cultural-products.html';
+                        break;
+                    case '定制路线':
+                        window.location.href = 'custom-route.html';
+                        break;
+                    case '乡村游记':
+                        window.location.href = 'rural-stories.html';
+                        break;
+                    default:
+                        // 其他功能
+                        alert(featureTitle + '功能即将上线');
+                }
+            });
+        });
+        
+        // 添加卡片点击事件
+        const cards = document.querySelectorAll('.experience-card, .product-card, .story-card');
+        cards.forEach(card => {
+            card.addEventListener('click', function() {
+                // 添加点击特效
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                    
+                    // 跳转到详情页
+                    if (this.classList.contains('experience-card')) {
+                        const cardTitle = this.querySelector('.experience-title').textContent;
+                        console.log('体验卡片被点击:', cardTitle);
+                        // 可以从详情页返回时保留之前的滚动位置
+                        sessionStorage.setItem('scrollPos', window.scrollY);
+                        window.location.href = 'product-detail.html';
+                    } else if (this.classList.contains('product-card')) {
+                        const cardTitle = this.querySelector('.product-name').textContent;
+                        console.log('商品卡片被点击:', cardTitle);
+                        window.location.href = 'product-detail.html';
+                    }
+                }, 150);
+            });
+        });
+        
+        // 添加"更多"按钮点击事件
+        const moreButtons = document.querySelectorAll('.section-more');
+        moreButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const sectionType = this.previousElementSibling.textContent;
+                console.log('更多按钮被点击:', sectionType);
+                
+                // 添加点击动画
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                    
+                    // 根据区域类型跳转到不同页面
+                    switch(sectionType) {
+                        case '热门体验':
+                            window.location.href = 'cultural-experience.html';
+                            break;
+                        case '特产好礼':
+                            window.location.href = 'cultural-products.html';
+                            break;
+                        case '乡村游记':
+                            window.location.href = 'rural-stories.html';
+                            break;
+                    }
+                }, 150);
+            });
+        });
+        
+        // 搜索栏交互
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('focus', function() {
+            this.parentElement.style.boxShadow = '0 0 0 2px rgba(141, 110, 99, 0.3)';
+        });
+        
+        searchInput.addEventListener('blur', function() {
+            this.parentElement.style.boxShadow = '0 1px 5px rgba(0,0,0,0.05)';
+        });
+        
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const searchValue = this.value.trim();
+                if (searchValue) {
+                    console.log('搜索:', searchValue);
+                    alert('搜索功能即将上线，您搜索的是: ' + searchValue);
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

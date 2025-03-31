@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>城乡文化直连平台 - 商户订单管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* iPhone 15 Pro Max 外壳 */
+        .device-container {
+            position: relative;
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 40px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        /* 顶部刘海 */
+        .notch {
+            position: absolute;
+            width: 180px;
+            height: 32px;
+            background: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 999;
+        }
+        
+        /* 底部指示条 */
+        .home-indicator {
+            position: absolute;
+            width: 135px;
+            height: 5px;
+            background: #fff;
+            border-radius: 3px;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        /* 侧边按钮 */
+        .power-button {
+            position: absolute;
+            width: 3px;
+            height: 28px;
+            background: #222;
+            top: 130px;
+            right: -3px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        
+        .volume-up {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 125px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .volume-down {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 200px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        /* 屏幕 */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #F9F7F4;
+            border-radius: 40px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 70px;
+        }
+        
+        /* 自定义滚动条样式 */
+        .screen::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .screen::-webkit-scrollbar-track {
+            background: transparent;
+            margin-right: 5px;
+        }
+        
+        .screen::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            border: 2px solid transparent;
+        }
+        
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 40px 40px 0 0;
+        }
+        
+        .status-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .battery-icon {
+            width: 25px;
+            height: 12px;
+            border: 1px solid #333;
+            border-radius: 3px;
+            padding: 1px;
+            margin-left: 5px;
+            position: relative;
+        }
+        
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 6px;
+            background: #333;
+            right: -4px;
+            top: 3px;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .battery-level {
+            height: 100%;
+            width: 60%;
+            background: #333;
+            border-radius: 1px;
+        }
+        
+        /* 顶部导航栏 */
+        .nav-bar {
+            height: 56px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            margin-top: 44px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        
+        .nav-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .notification-bell {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .notification-bell:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .notification-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #e53935;
+            border-radius: 50%;
+            top: 7px;
+            right: 7px;
+        }
+        
+        /* 背景装饰 */
+        .background-pattern {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(141, 110, 99, 0.1) 0%, rgba(109, 76, 65, 0.1) 100%);
+            z-index: -1;
+        }
+        
+        .pattern-1 {
+            top: -50px;
+            right: -100px;
+        }
+        
+        .pattern-2 {
+            bottom: 200px;
+            left: -150px;
+        }
+        
+        /* 统计卡片区域 */
+        .stats-container {
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        /* 标签栏 */
+        .tab-bar {
+            padding: 0 16px;
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            margin-bottom: 16px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+        
+        .tab-bar::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .tab {
+            padding: 8px 16px;
+            margin-right: 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            background: rgba(255, 255, 255, 0.6);
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .tab.active {
+            color: white;
+            background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%);
+            box-shadow: 0 2px 8px rgba(141, 110, 99, 0.3);
+            border: 1px solid rgba(141, 110, 99, 0.1);
+        }
+        
+        /* 搜索栏 */
+        .search-bar {
+            padding: 0 16px;
+            margin-bottom: 16px;
+        }
+        
+        .search-input {
+            width: 100%;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 12px;
+            padding: 0 16px 0 40px;
+            font-size: 14px;
+            color: #333;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            transition: all 0.3s;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+            background-repeat: no-repeat;
+            background-position: 16px center;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(141, 110, 99, 0.3);
+            box-shadow: 0 0 0 3px rgba(141, 110, 99, 0.1);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+        
+        /* 订单列表容器 */
+        .orders-container {
+            padding: 16px;
+            padding-bottom: 100px;
+            height: calc(100% - 250px);
+        }
+        
+        /* 订单卡片 */
+        .order-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+        }
+        
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .order-id {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .order-status {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: #FF9800;
+        }
+        
+        .status-confirmed {
+            background: rgba(33, 150, 243, 0.1);
+            color: #2196F3;
+        }
+        
+        .status-completed {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+        }
+        
+        .status-cancelled {
+            background: rgba(158, 158, 158, 0.1);
+            color: #9E9E9E;
+        }
+        
+        .order-content {
+            display: flex;
+            padding: 16px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .order-image-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+        
+        .order-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .item-count {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 8px 0 8px 0;
+        }
+        
+        .order-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .order-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .order-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        
+        .customer-info, .order-time {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .order-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #e53935;
+            align-self: flex-end;
+        }
+        
+        .order-actions {
+            display: flex;
+            justify-content: flex-end;
+            padding: 12px 16px;
+            gap: 10px;
+        }
+        
+        .action-button {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .detail-button {
+            color: #666;
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .ship-button, .contact-button {
+            color: white;
+            background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%);
+            box-shadow: 0 2px 8px rgba(141, 110, 99, 0.3);
+        }
+        
+        .review-button, .aftersale-button {
+            color: #8D6E63;
+            background: rgba(141, 110, 99, 0.1);
+        }
+        
+        .action-button:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* 空白提示 */
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .empty-icon {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 16px;
+        }
+        
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .empty-desc {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 24px;
+        }
+        
+        /* 底部导航容器 */
+        .bottom-nav-container {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        
+        /* 底部导航栏 */
+        .bottom-nav {
+            height: 54px;
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 5px;
+            border-radius: 20px;
+            width: 340px;
+            max-width: 96%;
+        }
+        
+        /* 底部导航栏项目 */
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item.active {
+            color: #8D6E63;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        /* 修复脚本位置 */
+        script {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <!-- 顶部刘海 -->
+        <div class="notch"></div>
+        
+        <!-- 侧边按钮 -->
+        <div class="power-button"></div>
+        <div class="volume-up"></div>
+        <div class="volume-down"></div>
+        
+        <!-- 底部指示条 -->
+        <div class="home-indicator"></div>
+        
+        <div class="screen">
+            <!-- 背景装饰 -->
+            <div class="background-pattern pattern-1"></div>
+            <div class="background-pattern pattern-2"></div>
+            
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-left">12:30</div>
+                <div class="status-right">
+                    <span style="margin-right: 5px;">5G</span>
+                    <div class="battery-icon">
+                        <div class="battery-level"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 顶部导航 -->
+            <div class="nav-bar">
+                <div class="nav-title">订单管理</div>
+                <div class="notification-bell">
+                    🔔
+                    <div class="notification-dot"></div>
+                </div>
+            </div>
+            
+            <!-- 统计卡片 -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value">32</div>
+                    <div class="stat-label">待处理</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">56</div>
+                    <div class="stat-label">本月订单</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">¥1,892</div>
+                    <div class="stat-label">本月收入</div>
+                </div>
+            </div>
+            
+            <!-- 订单类型标签栏 -->
+            <div class="tab-bar">
+                <div class="tab active" data-category="all">全部订单</div>
+                <div class="tab" data-category="products">商品订单</div>
+                <div class="tab" data-category="experiences">体验订单</div>
+                <div class="tab" data-category="homestays">民宿订单</div>
+            </div>
+            
+            <!-- 搜索栏 -->
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="搜索订单号、客户名称..." id="searchInput">
+            </div>
+            
+            <!-- 订单列表 -->
+            <div class="orders-container" id="ordersContainer">
+                <!-- 订单卡片 - 商品订单 -->
+                <div class="order-card" data-type="products">
+                    <div class="order-header">
+                        <div class="order-id">订单号: 20230518001</div>
+                        <div class="order-status status-pending">待发货</div>
+                    </div>
+                    <div class="order-content">
+                        <div class="order-image-container">
+                            <img src="https://img2.baidu.com/it/u=2493957948,1610582204&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=500" class="order-image">
+                            <div class="item-count">共3件</div>
+                        </div>
+                        <div class="order-info">
+                            <div class="order-title">景德镇手绘青花瓷碗套装等3件商品</div>
+                            <div class="order-details">
+                                <div class="customer-info">李明 · 138****8765</div>
+                                <div class="order-time">2023-05-18 14:30</div>
+                            </div>
+                            <div class="order-price">¥129.00</div>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <div class="action-button detail-button">查看详情</div>
+                        <div class="action-button ship-button">发货</div>
+                    </div>
+                </div>
+                
+                <!-- 订单卡片 - 体验订单 -->
+                <div class="order-card" data-type="experiences">
+                    <div class="order-header">
+                        <div class="order-id">订单号: 20230517002</div>
+                        <div class="order-status status-confirmed">已确认</div>
+                    </div>
+                    <div class="order-content">
+                        <div class="order-image-container">
+                            <img src="https://img0.baidu.com/it/u=693640841,2872647416&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=667" class="order-image">
+                            <div class="item-count">2人</div>
+                        </div>
+                        <div class="order-info">
+                            <div class="order-title">传统香囊制作体验课程</div>
+                            <div class="order-details">
+                                <div class="customer-info">王芳 · 139****2345</div>
+                                <div class="order-time">2023-05-20 10:00</div>
+                            </div>
+                            <div class="order-price">¥98.00</div>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <div class="action-button detail-button">查看详情</div>
+                        <div class="action-button contact-button">联系客户</div>
+                    </div>
+                </div>
+                
+                <!-- 订单卡片 - 民宿订单 -->
+                <div class="order-card" data-type="homestays">
+                    <div class="order-header">
+                        <div class="order-id">订单号: 20230516003</div>
+                        <div class="order-status status-completed">已完成</div>
+                    </div>
+                    <div class="order-content">
+                        <div class="order-image-container">
+                            <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimage109.360doc.com%2FDownloadImg%2F2023%2F10%2F0420%2F273301984_6_20231004084439338.jpg&refer=http%3A%2F%2Fimage109.360doc.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1744908941&t=e17ae35bed7c8e45e76d6450351ffb3e" class="order-image">
+                            <div class="item-count">2晚</div>
+                        </div>
+                        <div class="order-info">
+                            <div class="order-title">竹林山景大床房</div>
+                            <div class="order-details">
+                                <div class="customer-info">张伟 · 186****5432</div>
+                                <div class="order-time">2023-05-16 ~ 05-18</div>
+                            </div>
+                            <div class="order-price">¥288.00</div>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <div class="action-button detail-button">查看详情</div>
+                        <div class="action-button review-button">评价管理</div>
+                    </div>
+                </div>
+                
+                <!-- 订单卡片 - 商品订单 (已完成) -->
+                <div class="order-card" data-type="products">
+                    <div class="order-header">
+                        <div class="order-id">订单号: 20230515004</div>
+                        <div class="order-status status-completed">已完成</div>
+                    </div>
+                    <div class="order-content">
+                        <div class="order-image-container">
+                            <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcbu01.alicdn.com%2Fimg%2Fibank%2FO1CN01KnqbBf1t4tVAmCNAU_%21%212217056715849-0-cib.jpg&refer=http%3A%2F%2Fcbu01.alicdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1744909006&t=fc7d85cc5e2a496cf69d191aa35fba39" class="order-image">
+                            <div class="item-count">共1件</div>
+                        </div>
+                        <div class="order-info">
+                            <div class="order-title">武夷岩茶礼盒 - 武夷山原产</div>
+                            <div class="order-details">
+                                <div class="customer-info">陈静 · 159****7890</div>
+                                <div class="order-time">2023-05-15 09:45</div>
+                            </div>
+                            <div class="order-price">¥68.00</div>
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <div class="action-button detail-button">查看详情</div>
+                        <div class="action-button aftersale-button">售后处理</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 空白提示 -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">📋</div>
+                <div class="empty-title">暂无订单</div>
+                <div class="empty-desc">当前筛选条件下没有找到订单</div>
+            </div>
+        </div>
+        
+        <!-- 添加底部导航容器 - 放在screen容器外但在device-container内 -->
+        <div class="bottom-nav-container">
+            <div class="bottom-nav">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div>首页</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">📦</div>
+                    <div>商品</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">🎭</div>
+                    <div>体验</div>
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-icon">📋</div>
+                    <div>订单</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取DOM元素
+        const tabs = document.querySelectorAll('.tab');
+        const ordersContainer = document.getElementById('ordersContainer');
+        const emptyState = document.getElementById('emptyState');
+        const searchInput = document.getElementById('searchInput');
+        const orderCards = document.querySelectorAll('.order-card');
+        const detailButtons = document.querySelectorAll('.detail-button');
+        const actionButtons = document.querySelectorAll('.action-button:not(.detail-button)');
+        const notificationBell = document.querySelector('.notification-bell');
+        const bottomNavItems = document.querySelectorAll('.nav-item');
+        
+        // 标签切换
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const category = this.getAttribute('data-category');
+                filterOrders(category);
+            });
+        });
+        
+        // 过滤订单
+        function filterOrders(category) {
+            let hasVisibleOrders = false;
+            
+            orderCards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                    hasVisibleOrders = true;
+                } else if (category === card.getAttribute('data-type')) {
+                    card.style.display = 'block';
+                    hasVisibleOrders = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // 如果没有订单，显示空状态
+            if (hasVisibleOrders) {
+                ordersContainer.style.display = 'block';
+                emptyState.style.display = 'none';
+            } else {
+                ordersContainer.style.display = 'none';
+                emptyState.style.display = 'flex';
+            }
+        }
+        
+        // 搜索功能
+        searchInput.addEventListener('input', function() {
+            const keyword = this.value.toLowerCase().trim();
+            let hasResults = false;
+            
+            orderCards.forEach(card => {
+                const orderId = card.querySelector('.order-id').textContent.toLowerCase();
+                const orderTitle = card.querySelector('.order-title').textContent.toLowerCase();
+                const customerInfo = card.querySelector('.customer-info').textContent.toLowerCase();
+                
+                if (orderId.includes(keyword) || orderTitle.includes(keyword) || customerInfo.includes(keyword)) {
+                    card.style.display = 'block';
+                    hasResults = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // 如果没有搜索结果，显示空状态
+            if (hasResults) {
+                ordersContainer.style.display = 'block';
+                emptyState.style.display = 'none';
+            } else {
+                ordersContainer.style.display = 'none';
+                emptyState.style.display = 'flex';
+                document.querySelector('.empty-title').textContent = '没有找到订单';
+                document.querySelector('.empty-desc').textContent = '尝试其他搜索关键词或浏览所有订单';
+            }
+        });
+        
+        // 订单详情按钮
+        detailButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const card = this.closest('.order-card');
+                const orderId = card.querySelector('.order-id').textContent;
+                const orderType = card.getAttribute('data-type');
+                alert(`查看订单详情: ${orderId}\n订单类型: ${orderType}`);
+            });
+        });
+        
+        // 其他操作按钮
+        actionButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const card = this.closest('.order-card');
+                const orderId = card.querySelector('.order-id').textContent;
+                const actionText = this.textContent;
+                alert(`${actionText}: ${orderId}`);
+            });
+        });
+        
+        // 通知铃铛点击事件
+        notificationBell.addEventListener('click', function() {
+            alert('您有3条新通知\n1. 系统更新: 新增订单导出功能\n2. 订单提醒: 有2个新订单待处理\n3. 评价提醒: 收到1条新评价');
+            // 移除通知点
+            this.querySelector('.notification-dot').style.display = 'none';
+        });
+        
+        // 底部导航点击事件
+        bottomNavItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const navText = this.querySelector('div:last-child').textContent;
+                if (navText === '订单') return;
+                
+                switch(navText) {
+                    case '首页':
+                        alert('首页功能即将上线');
+                        break;
+                    case '商品':
+                        window.location.href = 'products.html';
+                        break;
+                    case '体验':
+                        window.location.href = 'experiences.html';
+                        break;
+                }
+            });
+        });
+        
+        // 订单卡片点击事件
+        orderCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const orderId = this.querySelector('.order-id').textContent;
+                alert(`查看订单详情: ${orderId}`);
+            });
+        });
+        
+        // 初始化: 显示所有订单
+        filterOrders('all');
+    });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>城乡文化直连平台 - 商品详情</title>
+    <script src="../iframe-adapter.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f7f7f7;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* iPhone 15 Pro Max 外壳 */
+        .device-container {
+            position: relative;
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 55px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        /* 顶部刘海 */
+        .notch {
+            position: absolute;
+            width: 180px;
+            height: 32px;
+            background: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 999;
+        }
+        
+        /* 底部指示条 */
+        .home-indicator {
+            position: absolute;
+            width: 135px;
+            height: 5px;
+            background: #fff;
+            border-radius: 3px;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        /* 侧边按钮 */
+        .power-button {
+            position: absolute;
+            width: 3px;
+            height: 28px;
+            background: #222;
+            top: 130px;
+            right: -3px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        
+        .volume-up {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 125px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .volume-down {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 200px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        /* 屏幕 */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #F9F7F4;
+            border-radius: 45px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            color: #000;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .battery-icon {
+            width: 25px;
+            height: 12px;
+            border: 1px solid #000;
+            border-radius: 3px;
+            padding: 1px;
+            margin-left: 5px;
+            position: relative;
+        }
+        
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 6px;
+            background: #000;
+            right: -4px;
+            top: 3px;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .battery-level {
+            height: 100%;
+            width: 60%;
+            background: #000;
+            border-radius: 1px;
+        }
+        
+        /* 内容区域 */
+        .content {
+            height: calc(100% - 44px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            background-image: url('https://images.unsplash.com/photo-1595411425732-e49e26c310da?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80&brightness=-95&saturation=-30&alpha=0.08');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            padding-bottom: 70px;
+        }
+        
+        /* 顶部导航栏 */
+        .nav-bar {
+            position: fixed;
+            top: 44px;
+            left: 0;
+            right: 0;
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 100;
+        }
+        
+        .nav-back {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .nav-share, .nav-favorite {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 产品轮播图 */
+        .product-swiper {
+            width: 100%;
+            height: 375px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .product-swiper-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        
+        .product-swiper-item.active {
+            opacity: 1;
+        }
+        
+        .product-swiper-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .product-swiper-pagination {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .product-swiper-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+        
+        .product-swiper-dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* 模拟图标 */
+        .icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: inherit;
+        }
+        
+        /* 产品信息区域 */
+        .product-info-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px 20px 0 0;
+            margin-top: -20px;
+            position: relative;
+            z-index: 10;
+            padding: 24px 16px 16px;
+        }
+        
+        .product-price {
+            font-size: 24px;
+            font-weight: 600;
+            color: #8D6E63;
+            margin-bottom: 5px;
+        }
+        
+        .product-price .unit {
+            font-size: 14px;
+            font-weight: 400;
+        }
+        
+        .product-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            letter-spacing: 0.5px;
+        }
+        
+        .product-origin {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 12px;
+        }
+        
+        .origin-icon {
+            margin-right: 4px;
+            font-size: 14px;
+        }
+        
+        .product-labels {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .product-label {
+            background: rgba(141, 110, 99, 0.1);
+            color: #8D6E63;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .product-brief {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        
+        .sales-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 16px;
+        }
+        
+        /* 规格选择区域 */
+        .product-options {
+            background: rgba(255, 255, 255, 0.9);
+            margin-top: 10px;
+            padding: 16px;
+            border-radius: 12px;
+        }
+        
+        .option-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        
+        .option-group {
+            margin-bottom: 20px;
+        }
+        
+        .option-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .option-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .option-item {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .option-item.active {
+            background: rgba(141, 110, 99, 0.1);
+            border-color: #8D6E63;
+            color: #8D6E63;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .quantity-input {
+            width: 50px;
+            height: 30px;
+            text-align: center;
+            font-size: 14px;
+            border: none;
+            background: transparent;
+            margin: 0 10px;
+        }
+        
+        /* 分隔线 */
+        .divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.05);
+            margin: 16px 0;
+        }
+        
+        /* 文化故事区域 */
+        .culture-story {
+            background: rgba(255, 255, 255, 0.9);
+            margin-top: 10px;
+            padding: 16px;
+            border-radius: 12px;
+        }
+        
+        .story-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .story-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .story-title .icon {
+            margin-right: 6px;
+            font-size: 18px;
+        }
+        
+        .story-expand {
+            font-size: 12px;
+            color: #8D6E63;
+        }
+        
+        .story-content {
+            height: 120px;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+        
+        .story-content.expanded {
+            height: auto;
+        }
+        
+        .story-text {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+        
+        .story-images {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .story-image {
+            width: calc(33.333% - 6px);
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        
+        /* 相关推荐区域 */
+        .related-products {
+            background: rgba(255, 255, 255, 0.9);
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding: 16px;
+            border-radius: 12px;
+        }
+        
+        .related-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        
+        .related-scroll {
+            overflow-x: auto;
+            display: flex;
+            gap: 12px;
+            padding-bottom: 16px;
+        }
+        
+        .related-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .related-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        
+        .related-item {
+            flex: 0 0 120px;
+            width: 120px;
+        }
+        
+        .related-image {
+            width: 100%;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-bottom: 8px;
+        }
+        
+        .related-name {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .related-price {
+            font-size: 14px;
+            font-weight: 500;
+            color: #8D6E63;
+        }
+        
+        /* 用户评价区域 */
+        .reviews-section {
+            background: rgba(255, 255, 255, 0.9);
+            margin-top: 10px;
+            padding: 16px;
+            border-radius: 12px;
+        }
+        
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .reviews-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .reviews-title .count {
+            margin-left: 6px;
+            color: #999;
+            font-size: 14px;
+            font-weight: normal;
+        }
+        
+        .reviews-more {
+            font-size: 12px;
+            color: #8D6E63;
+            display: flex;
+            align-items: center;
+        }
+        
+        .reviews-more::after {
+            content: "→";
+            margin-left: 4px;
+        }
+        
+        .reviews-stats {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .rating-number {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            margin-right: 12px;
+        }
+        
+        .rating-stars {
+            display: flex;
+            color: #FFB74D;
+            margin-right: 12px;
+        }
+        
+        .rating-stats {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .review-tag {
+            background: rgba(141, 110, 99, 0.1);
+            color: #8D6E63;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 100px;
+        }
+        
+        .review-tag.active {
+            background: #8D6E63;
+            color: white;
+        }
+        
+        .reviews-list {
+            margin-bottom: 16px;
+        }
+        
+        .review-item {
+            margin-bottom: 20px;
+        }
+        
+        .review-user {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 8px;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .review-date {
+            font-size: 12px;
+            color: #999;
+            margin-left: auto;
+        }
+        
+        .review-content {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        
+        .review-images {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .review-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+        
+        .review-product-info {
+            font-size: 12px;
+            color: #999;
+            margin-top: 8px;
+        }
+        
+        .review-more {
+            text-align: center;
+            color: #8D6E63;
+            font-size: 14px;
+            padding: 10px 0;
+        }
+        
+        /* 底部操作栏 */
+        .bottom-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 100;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            border-bottom-left-radius: 45px;
+            border-bottom-right-radius: 45px;
+        }
+        
+        .bottom-actions {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+        }
+        
+        .action-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: #666;
+            width: 40px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .action-icon .icon {
+            font-size: 22px;
+            margin-bottom: 2px;
+        }
+        
+        .action-icon:hover {
+            color: #8D6E63;
+        }
+        
+        .buy-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .buy-button {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .add-cart {
+            background: rgba(141, 110, 99, 0.15);
+            color: #8D6E63;
+        }
+        
+        .buy-now {
+            background: #8D6E63;
+            color: white;
+        }
+        
+        .add-cart:hover {
+            background: rgba(141, 110, 99, 0.25);
+        }
+        
+        .buy-now:hover {
+            background: #7D5E53;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <div class="notch"></div>
+        <div class="home-indicator"></div>
+        <div class="power-button"></div>
+        <div class="volume-up"></div>
+        <div class="volume-down"></div>
+        
+        <div class="screen">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-left">12:30</div>
+                <div class="status-right">
+                    <span style="margin-right: 5px;">5G</span>
+                    <div class="battery-icon">
+                        <div class="battery-level"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 顶部导航栏 -->
+                <div class="nav-bar">
+                    <div class="nav-back">
+                        <span class="icon">←</span>
+                    </div>
+                    <div class="nav-actions">
+                        <div class="nav-share">
+                            <span class="icon">⇪</span>
+                        </div>
+                        <div class="nav-favorite">
+                            <span class="icon">♡</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 产品轮播图 -->
+                <div class="product-swiper">
+                    <div class="product-swiper-item active">
+                        <img src="https://p9.itc.cn/images01/20230423/8e6cfd1d71974940840b7539a73b360c.jpeg" class="product-swiper-img" alt="普洱茶-1">
+                    </div>
+                    <div class="product-swiper-item">
+                        <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="product-swiper-img" alt="普洱茶-2">
+                    </div>
+                    <div class="product-swiper-item">
+                        <img src="https://images.pexels.com/photos/1638280/pexels-photo-1638280.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="product-swiper-img" alt="普洱茶-3">
+                    </div>
+                    <div class="product-swiper-pagination">
+                        <div class="product-swiper-dot active"></div>
+                        <div class="product-swiper-dot"></div>
+                        <div class="product-swiper-dot"></div>
+                    </div>
+                </div>
+                
+                <!-- 产品信息区域 -->
+                <div class="product-info-container">
+                    <div class="product-price">¥128 <span class="unit">起</span></div>
+                    <h1 class="product-title">云南普洱茶 古树原料 经典熟茶</h1>
+                    <div class="product-origin">
+                        <span class="icon origin-icon">📍</span>
+                        <span>云南省普洱市澜沧拉祜族自治县</span>
+                    </div>
+                    <div class="product-labels">
+                        <div class="product-label">国家地理标志</div>
+                        <div class="product-label">非物质文化遗产</div>
+                        <div class="product-label">生态种植</div>
+                    </div>
+                    <div class="product-brief">
+                        采用百年以上古树茶鲜叶制作，口感醇厚，汤色红亮，香气陈韵悠长，回甘持久。传统手工制作，保留了普洱茶的原汁原味。
+                    </div>
+                    <div class="sales-info">
+                        <span>月销 2,689</span>
+                        <span>好评率 99.8%</span>
+                        <span>收藏 8,254</span>
+                    </div>
+                </div>
+                
+                <!-- 规格选择区域 -->
+                <div class="product-options">
+                    <div class="option-title">商品规格</div>
+                    
+                    <div class="option-group">
+                        <div class="option-label">茶叶年份</div>
+                        <div class="option-items">
+                            <div class="option-item">2018年</div>
+                            <div class="option-item active">2020年</div>
+                            <div class="option-item">2022年</div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider"></div>
+                    
+                    <div class="option-group">
+                        <div class="option-label">包装选择</div>
+                        <div class="option-items">
+                            <div class="option-item">简易包装</div>
+                            <div class="option-item active">精美礼盒</div>
+                            <div class="option-item">竹篮包装</div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider"></div>
+                    
+                    <div class="option-group">
+                        <div class="option-label">规格重量</div>
+                        <div class="option-items">
+                            <div class="option-item">100g</div>
+                            <div class="option-item active">200g</div>
+                            <div class="option-item">357g饼茶</div>
+                            <div class="option-item">500g</div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider"></div>
+                    
+                    <div class="option-group">
+                        <div class="option-label">购买数量</div>
+                        <div class="quantity-control">
+                            <div class="quantity-btn decrease">-</div>
+                            <input type="text" class="quantity-input" value="1" readonly>
+                            <div class="quantity-btn increase">+</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 文化故事区域 -->
+                <div class="culture-story">
+                    <div class="story-header">
+                        <div class="story-title">
+                            <span class="icon">📜</span>
+                            <span>普洱茶的文化故事</span>
+                        </div>
+                        <div class="story-expand" id="storyToggle">展开</div>
+                    </div>
+                    <div class="story-content" id="storyContent">
+                        <p class="story-text">普洱茶，作为中国历史悠久的传统名茶，起源于唐朝，是中国唯一冠以地名的茶类。它不仅是一种饮品，更是承载着深厚文化底蕴的精神载体。</p>
+                        <p class="story-text">在澜沧古茶园，百年古树生长在海拔1800米以上的原始森林中，四季云雾缭绕，昼夜温差大，土壤肥沃，为古树茶提供了理想的生长环境。</p>
+                        <p class="story-text">古树茶的采摘和制作仍然坚持传统手工工艺，秉承着"一芽一叶"的采摘标准，经过晒青、杀青、揉捻、晒干等工序，再经过自然发酵，最终成为具有独特风味的普洱茶。</p>
+                        <div class="story-images">
+                            <img src="https://images.pexels.com/photos/230477/pexels-photo-230477.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="story-image" alt="茶园风景">
+                            <img src="https://pic.rmb.bdstatic.com/bjh/down/25161bc97071a46090d5ee0543daf598.jpeg" class="story-image" alt="茶叶制作">
+                            <img src="https://img0.baidu.com/it/u=1259204596,3185553933&fm=253&fmt=auto&app=120&f=JPEG?w=1099&h=800" class="story-image" alt="手工采茶">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 相关推荐区域 -->
+                <div class="related-products">
+                    <div class="related-title">相关推荐</div>
+                    <div class="related-scroll">
+                        <div class="related-item">
+                            <img src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="related-image" alt="普洱生茶">
+                            <div class="related-name">古树生茶 2015年</div>
+                            <div class="related-price">¥198</div>
+                        </div>
+                        <div class="related-item">
+                            <img src="https://images.pexels.com/photos/1638280/pexels-photo-1638280.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="related-image" alt="手工茶具">
+                            <div class="related-name">紫砂茶具套装</div>
+                            <div class="related-price">¥298</div>
+                        </div>
+                        <div class="related-item">
+                            <img src="https://t15.baidu.com/it/u=2609934458,2174461140&fm=224&app=112&f=JPEG?w=500&h=500" class="related-image" alt="茶饼礼盒">
+                            <div class="related-name">普洱茶饼礼盒装</div>
+                            <div class="related-price">¥568</div>
+                        </div>
+                        <div class="related-item">
+                            <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcbu01.alicdn.com%2Fimg%2Fibank%2FO1CN01tqh29z1oQM0SzMeYX_%21%212210576205219-0-cib.jpg&refer=http%3A%2F%2Fcbu01.alicdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1744907588&t=9e9291ba9489f2332458d923cd35b03b" class="related-image" alt="茶道套装">
+                            <div class="related-name">便携式茶道套装</div>
+                            <div class="related-price">¥258</div>
+                        </div>
+                        <div class="related-item">
+                            <img src="https://images.pexels.com/photos/1793035/pexels-photo-1793035.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="related-image" alt="精品老茶">
+                            <div class="related-name">90年代老茶珍藏</div>
+                            <div class="related-price">¥1280</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 用户评价区域 -->
+                <div class="reviews-section">
+                    <div class="reviews-header">
+                        <div class="reviews-title">
+                            用户评价<span class="count">(286)</span>
+                        </div>
+                        <div class="reviews-more">查看全部</div>
+                    </div>
+
+                    <div class="reviews-stats">
+                        <div class="rating-number">4.9</div>
+                        <div class="rating-stars">★★★★★</div>
+                        <div class="rating-stats">99.8%好评</div>
+                    </div>
+
+                    <div class="tags-container">
+                        <div class="review-tag active">全部 286</div>
+                        <div class="review-tag">好评 285</div>
+                        <div class="review-tag">有图 164</div>
+                        <div class="review-tag">口感醇厚 126</div>
+                        <div class="review-tag">包装精美 96</div>
+                        <div class="review-tag">物流快 62</div>
+                    </div>
+
+                    <div class="reviews-list">
+                        <div class="review-item">
+                            <div class="review-user">
+                                <img src="https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="user-avatar" alt="用户头像">
+                                <div class="user-name">茶韵*****香</div>
+                                <div class="review-date">2023-11-15</div>
+                            </div>
+                            <div class="review-content">
+                                收到茶叶的包装非常精美，开箱那一刻真的被惊艳到了！冲泡后茶汤红亮透澈，香气陈韵悠长，入口醇厚顺滑，回甘持久，茶气足，非常满意这次的购买！
+                            </div>
+                            <div class="review-images">
+                                <img src="https://images.pexels.com/photos/1638280/pexels-photo-1638280.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="review-image" alt="用户评价图片1">
+                                <img src="https://images.pexels.com/photos/905485/pexels-photo-905485.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="review-image" alt="用户评价图片2">
+                            </div>
+                            <div class="review-product-info">规格：2020年 357g饼茶 精美礼盒</div>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-user">
+                                <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="user-avatar" alt="用户头像">
+                                <div class="user-name">普洱茶爱好者</div>
+                                <div class="review-date">2023-10-28</div>
+                            </div>
+                            <div class="review-content">
+                                作为一个喝了十多年普洱的老茶客，我认为这款茶的性价比非常高。茶质好，汤色红亮，有明显的陈韵，很适合收藏和品饮。卖家的服务也很贴心，赠送了一本普洱茶品鉴手册。
+                            </div>
+                            <div class="review-product-info">规格：2018年 200g 竹篮包装</div>
+                        </div>
+                    </div>
+
+                    <div class="review-more">查看更多评价</div>
+                </div>
+
+                <!-- 底部留白，确保内容不被底部栏遮挡 -->
+                <div style="height: 80px;"></div>
+
+                <!-- 底部操作栏 -->
+                <div class="bottom-bar">
+                    <div class="bottom-actions">
+                        <div class="action-icon">
+                            <span class="icon">🏠</span>
+                            <span>首页</span>
+                        </div>
+                        <div class="action-icon">
+                            <span class="icon">💬</span>
+                            <span>客服</span>
+                        </div>
+                        <div class="action-icon">
+                            <span class="icon">🛒</span>
+                            <span>购物车</span>
+                        </div>
+                    </div>
+                    <div class="buy-buttons">
+                        <div class="buy-button add-cart">加购物车</div>
+                        <div class="buy-button buy-now">立即购买</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 产品轮播图逻辑
+        let currentProductSlide = 0;
+        const productSlides = document.querySelectorAll('.product-swiper-item');
+        const productDots = document.querySelectorAll('.product-swiper-dot');
+        
+        function showProductSlide(n) {
+            // 隐藏所有幻灯片
+            productSlides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            productDots.forEach(dot => {
+                dot.classList.remove('active');
+            });
+            
+            // 显示当前幻灯片
+            productSlides[n].classList.add('active');
+            productDots[n].classList.add('active');
+        }
+        
+        function nextProductSlide() {
+            currentProductSlide = (currentProductSlide + 1) % productSlides.length;
+            showProductSlide(currentProductSlide);
+        }
+        
+        // 自动轮播
+        setInterval(nextProductSlide, 4000);
+        
+        // 为轮播点添加点击事件
+        productDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentProductSlide = index;
+                showProductSlide(currentProductSlide);
+            });
+        });
+        
+        // 返回按钮点击事件
+        document.querySelector('.nav-back').addEventListener('click', function() {
+            console.log('返回按钮被点击');
+            // 这里可以添加返回上一页的逻辑
+        });
+        
+        // 收藏按钮点击事件
+        document.querySelector('.nav-favorite').addEventListener('click', function() {
+            console.log('收藏按钮被点击');
+            this.innerHTML = '<span class="icon" style="color: #e91e63;">❤</span>';
+            // 这里可以添加收藏逻辑
+        });
+        
+        // 分享按钮点击事件
+        document.querySelector('.nav-share').addEventListener('click', function() {
+            console.log('分享按钮被点击');
+            // 这里可以添加分享逻辑
+        });
+        
+        // 规格选择逻辑
+        const optionItems = document.querySelectorAll('.option-item');
+        optionItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // 获取同组的其他选项
+                const siblings = Array.from(this.parentElement.children);
+                // 移除同组其他选项的active类
+                siblings.forEach(sibling => sibling.classList.remove('active'));
+                // 为当前选项添加active类
+                this.classList.add('active');
+                // 这里可以添加更新价格等逻辑
+            });
+        });
+        
+        // 数量控制逻辑
+        const decreaseBtn = document.querySelector('.decrease');
+        const increaseBtn = document.querySelector('.increase');
+        const quantityInput = document.querySelector('.quantity-input');
+        
+        decreaseBtn.addEventListener('click', function() {
+            let value = parseInt(quantityInput.value);
+            if (value > 1) {
+                value--;
+                quantityInput.value = value;
+            }
+        });
+        
+        increaseBtn.addEventListener('click', function() {
+            let value = parseInt(quantityInput.value);
+            value++;
+            quantityInput.value = value;
+        });
+        
+        // 文化故事展开收起
+        const storyToggle = document.getElementById('storyToggle');
+        const storyContent = document.getElementById('storyContent');
+        
+        storyToggle.addEventListener('click', function() {
+            if (storyContent.classList.contains('expanded')) {
+                storyContent.classList.remove('expanded');
+                storyToggle.textContent = '展开';
+            } else {
+                storyContent.classList.add('expanded');
+                storyToggle.textContent = '收起';
+            }
+        });
+        
+        // 底部操作按钮动效
+        const buyButtons = document.querySelectorAll('.buy-button');
+        buyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+        
+        // 添加购物车动画效果
+        const addCartButton = document.querySelector('.add-cart');
+        addCartButton.addEventListener('click', function() {
+            // 这里可以添加飞入购物车的动画效果
+            alert('已添加到购物车！');
+        });
+        
+        // 立即购买按钮
+        const buyNowButton = document.querySelector('.buy-now');
+        buyNowButton.addEventListener('click', function() {
+            // 跳转到结算页面
+            alert('即将跳转到结算页面！');
+        });
+
+        // 评价标签点击效果
+        const reviewTags = document.querySelectorAll('.review-tag');
+        reviewTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                reviewTags.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                // 在实际应用中，这里可以添加筛选评价的逻辑
+            });
+        });
+
+        // 查看更多评价按钮
+        const reviewMoreBtn = document.querySelector('.review-more');
+        reviewMoreBtn.addEventListener('click', function() {
+            // 在实际应用中，这里可以添加加载更多评价的逻辑
+            alert('加载更多评价');
+        });
+
+        // 确保页面滚动到顶部
+        window.scrollTo(0, 0);
+    </script>
+</body>
+</html> 

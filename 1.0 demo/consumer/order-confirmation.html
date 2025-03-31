@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>城乡文化直连平台 - 订单确认与支付</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            background-color: #ffffff;
+            color: #333333;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* iPhone 15 Pro Max 外壳 */
+        .device-container {
+            position: relative;
+            width: 375px;
+            height: 812px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 40px;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+            padding: 10px;
+            overflow: hidden;
+            box-sizing: content-box;
+            max-width: 100%;
+        }
+        
+        /* 顶部刘海 */
+        .notch {
+            position: absolute;
+            width: 180px;
+            height: 32px;
+            background: #000;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 999;
+        }
+        
+        /* 底部指示条 */
+        .home-indicator {
+            position: absolute;
+            width: 135px;
+            height: 5px;
+            background: #fff;
+            border-radius: 3px;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+        }
+        
+        /* 侧边按钮 */
+        .power-button {
+            position: absolute;
+            width: 3px;
+            height: 28px;
+            background: #222;
+            top: 130px;
+            right: -3px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+        
+        .volume-up {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 125px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .volume-down {
+            position: absolute;
+            width: 3px;
+            height: 60px;
+            background: #222;
+            top: 200px;
+            left: -3px;
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+        }
+        
+        /* 屏幕 */
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #F9F7F4;
+            border-radius: 28px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 90px; /* 为底部支付条留出空间 */
+            box-sizing: border-box;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); /* 添加内阴影，增强边缘可见性 */
+        }
+        
+        /* 自定义滚动条样式 */
+        .screen::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .screen::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .screen::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            border: 2px solid transparent;
+        }
+        
+        /* 状态栏 */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #8D6E63;
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(157, 128, 115, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 28px 28px 0 0;
+            color: #fff;
+        }
+        
+        /* 顶部导航栏 */
+        .nav-bar {
+            height: 56px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            margin-top: 0;
+            background: rgba(157, 128, 115, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: sticky;
+            top: 44px; /* 紧随状态栏之后 */
+            z-index: 99;
+            color: #fff;
+        }
+        
+        .nav-title {
+            font-size: 18px;
+            font-weight: 600;
+            flex-grow: 1;
+            text-align: center;
+            margin-left: 24px;
+        }
+        
+        .back-button {
+            font-size: 20px;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+        /* 内容区域样式 */
+        .content {
+            padding: 16px;
+        }
+        
+        /* 订单商品区域 */
+        .order-item-section {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-icon {
+            font-size: 18px;
+            margin-right: 8px;
+            color: #8D6E63;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .order-item {
+            display: flex;
+            padding-bottom: 12px;
+        }
+        
+        .item-image {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .item-details {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        
+        .item-specs {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .item-price-quantity {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+        
+        .item-price {
+            color: #8D6E63;
+            font-weight: 600;
+        }
+        
+        .item-quantity {
+            color: #999;
+        }
+        
+        /* 收货地址区域 */
+        .address-section {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        
+        .address-content {
+            padding-left: 26px; /* 与section-icon对齐 */
+        }
+        
+        .address-name-phone {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        
+        .address-name, .address-phone {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .address-detail {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .edit-button {
+            color: #8D6E63;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        /* 订单详情区域 */
+        .order-details-section {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .price-label {
+            color: #666;
+        }
+        
+        .price-value {
+            color: #333;
+        }
+        
+        .price-value.discount {
+            color: #E53935;
+        }
+        
+        .price-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+        
+        .price-total-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .price-total-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #8D6E63;
+        }
+        
+        /* 支付方式区域 */
+        .payment-section {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        
+        .payment-option {
+            display: flex;
+            align-items: center;
+            margin-top: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .payment-option:last-child {
+            border-bottom: none;
+        }
+        
+        .payment-icon {
+            width: 24px;
+            height: 24px;
+            font-size: 24px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .payment-name {
+            flex: 1;
+            font-size: 15px;
+            color: #333;
+        }
+        
+        .payment-radio {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .payment-radio.selected {
+            border-color: #8D6E63;
+        }
+        
+        .payment-radio.selected::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #8D6E63;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* 底部结算栏容器 */
+        .payment-container {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 345px;
+            height: 70px;
+            z-index: 100;
+        }
+        
+        /* 底部结算栏 */
+        .payment-bar-new {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            border-radius: 18px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+        }
+        
+        .payment-amount {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .payment-amount-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #8D6E63;
+        }
+        
+        .pay-button {
+            background: linear-gradient(135deg, #8D6E63 0%, #6D4C41 100%);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(109, 76, 65, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .pay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(109, 76, 65, 0.4);
+        }
+        
+        .pay-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(109, 76, 65, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <!-- 顶部刘海 -->
+        <div class="notch"></div>
+        
+        <!-- 侧边按钮 -->
+        <div class="power-button"></div>
+        <div class="volume-up"></div>
+        <div class="volume-down"></div>
+        
+        <!-- 底部指示条 -->
+        <div class="home-indicator"></div>
+        
+        <div class="screen">
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div>12:30</div>
+                <div>
+                    <span style="margin-right: 5px;">5G</span>
+                    <span>100%</span>
+                </div>
+            </div>
+            
+            <!-- 顶部导航 -->
+            <div class="nav-bar">
+                <div class="back-button">←</div>
+                <div class="nav-title">订单确认与支付</div>
+                <div style="width:24px;"></div>
+            </div>
+            
+            <!-- 内容区域 -->
+            <div class="content">
+                <!-- 订单商品 -->
+                <div class="order-item-section">
+                    <div class="section-header">
+                        <div class="section-icon">📦</div>
+                        <div class="section-title">订单商品</div>
+                    </div>
+                    
+                    <div class="order-item">
+                        <img src="https://t14.baidu.com/it/u=979387117,3876779821&fm=224&app=112&f=JPEG?w=500&h=500" class="item-image" alt="红茶小罐装">
+                        <div class="item-details">
+                            <div class="item-name">红茶小罐装</div>
+                            <div class="item-specs">2023年 | 便携盒装 | 50g装</div>
+                            <div class="item-price-quantity">
+                                <div class="item-price">¥58.00</div>
+                                <div class="item-quantity">×1</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 收货地址 -->
+                <div class="address-section">
+                    <div class="section-header">
+                        <div class="section-icon">📍</div>
+                        <div class="section-title">配送地址</div>
+                        <div style="flex:1;"></div>
+                        <div class="edit-button">修改</div>
+                    </div>
+                    
+                    <div class="address-content">
+                        <div class="address-name-phone">
+                            <div class="address-name">李明</div>
+                            <div class="address-phone">13812345678</div>
+                        </div>
+                        <div class="address-detail">浙江省杭州市西湖区文化创意园A座301室</div>
+                    </div>
+                </div>
+                
+                <!-- 订单明细 -->
+                <div class="order-details-section">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <div class="section-title">订单明细</div>
+                    </div>
+                    
+                    <div class="price-row">
+                        <div class="price-label">商品总价</div>
+                        <div class="price-value">¥58.00</div>
+                    </div>
+                    
+                    <div class="price-row">
+                        <div class="price-label">运费</div>
+                        <div class="price-value">¥0.00</div>
+                    </div>
+                    
+                    <div class="price-row">
+                        <div class="price-label">包装费</div>
+                        <div class="price-value">¥2.00</div>
+                    </div>
+                    
+                    <div class="price-row">
+                        <div class="price-label">优惠券</div>
+                        <div class="price-value discount">-¥5.00</div>
+                    </div>
+                    
+                    <div class="price-total-row">
+                        <div class="price-total-label">实付款</div>
+                        <div class="price-total-value">¥55.00</div>
+                    </div>
+                </div>
+                
+                <!-- 支付方式 -->
+                <div class="payment-section">
+                    <div class="section-header">
+                        <div class="section-icon">💳</div>
+                        <div class="section-title">支付方式</div>
+                    </div>
+                    
+                    <div class="payment-option">
+                        <div class="payment-icon">📱</div>
+                        <div class="payment-name">微信支付</div>
+                        <div class="payment-radio selected"></div>
+                    </div>
+                    
+                    <div class="payment-option">
+                        <div class="payment-icon">💰</div>
+                        <div class="payment-name">支付宝</div>
+                        <div class="payment-radio"></div>
+                    </div>
+                    
+                    <div class="payment-option">
+                        <div class="payment-icon">💳</div>
+                        <div class="payment-name">银行卡支付</div>
+                        <div class="payment-radio"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 添加底部结算栏容器 -->
+        <div class="payment-container">
+            <div class="payment-bar-new">
+                <div class="payment-amount">
+                    合计: <span class="payment-amount-value">¥55.00</span>
+                </div>
+                <div class="pay-button">立即支付</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 支付方式选择
+            const paymentRadios = document.querySelectorAll('.payment-radio');
+            
+            paymentRadios.forEach(radio => {
+                radio.addEventListener('click', function() {
+                    // 取消所有选中状态
+                    paymentRadios.forEach(r => r.classList.remove('selected'));
+                    
+                    // 选中当前点击的选项
+                    this.classList.add('selected');
+                });
+            });
+            
+            // 支付按钮点击事件
+            document.querySelector('.pay-button').addEventListener('click', function() {
+                alert('订单提交成功！即将跳转到支付页面...');
+            });
+            
+            // 返回按钮点击事件
+            document.querySelector('.back-button').addEventListener('click', function() {
+                alert('返回上一页');
+            });
+            
+            // 修改地址点击事件
+            document.querySelector('.edit-button').addEventListener('click', function() {
+                alert('修改配送地址');
+            });
+        });
+    </script>
+</body>
+</html>
