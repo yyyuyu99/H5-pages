@@ -32,41 +32,40 @@
 - **订单管理 (`orders.html`)**: 集中处理来自商品、体验和民宿等不同类型的订单。
 - **小松塔AI助手 (`ai-tools.html`)**: 集成了内容创作（如文案生成）和数据分析的智能工具，辅助商户高效运营。
 
-## 3. 技术栈
 
-- **前端**: HTML, CSS, JavaScript
-- **特点**: 移动优先，采用H5技术，适配主流移动设备。
-
-## 4. 项目结构/
-|-- consumer/ # 消费者端页面
-| |-- 1_index.html
-| |-- cultural-experience.html
-| |-- cultural-products.html
-| |-- ...
-|
-|-- merchant/ # 商户端页面
-| |-- analytics.html
-| |-- experiences.html
-| |-- orders.html
-| |-- ...
-|
-|-- login-selection.html # 登录选择页
-|-- README.md # 项目说明文档
-
-## 5. 页面预览
+## 3. 核心页面预览
 
 #### 登录选择页
 
-![登录选择页](https://via.placeholder.com/375x812.png?text=Login+Selection)
-
----
+![1752507608077](images/README/1752507608077.png)
 
 #### 消费者端核心页面
 
-| 首页 | 文化体验 | 商品详情 |
-| :---: | :---: | :---: |
-| ![首页](https://via.placeholder.com/375x812.png?text=Consumer+Home) | ![文化体验](https://via.placeholder.com/375x812.png?text=Cultural+Experience) | ![商品详情](https://via.placeholder.com/375x812.png?text=Product+Detail) |
+##### 首页
 
-| 定制路线 | 个人中心 | 乡村游记 |
-| :---: | :---: | :---: |
-| ![定制路线](https://via.placeholder.com/375x812.png?text=Custom+Route) | ![个人中心](https://via.placeholder
+![1752508042116](images/README/1752508042116.png)
+
+##### 路线定制页
+
+![1752508131429](images/README/1752508131429.png)
+
+##### 用户运营体系
+
+![1752508251848](images/README/1752508251848.png)
+
+
+
+
+#### 消费者端核心页面
+
+##### AI工具页
+
+![1752508382676](images/README/1752508382676.png)
+
+##### 内容编辑页
+
+![1752508331452](images/README/1752508331452.png)
+
+##### 数据分析页
+
+![1752508423442](images/README/1752508423442.png)
